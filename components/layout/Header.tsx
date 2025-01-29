@@ -1,16 +1,16 @@
 import React from 'react';
 import Link from 'next/link'; 
-import { useRouter } from 'next/router'; // Import useRouter hook
+import { useRouter } from 'next/router';
 import styles from '@/styles/Header.module.css'; 
 
 const Header: React.FC = () => {
-  const router = useRouter(); // Get the current route
+  const router = useRouter(); 
   
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
         <Link href="/" className={`${styles.link} ${router.pathname === '/' ? styles.active : ''}`}>
-          Home
+          Table
         </Link>
         <Link href="/convert" className={`${styles.link} ${router.pathname === '/convert' ? styles.active : ''}`}>
           Convert
