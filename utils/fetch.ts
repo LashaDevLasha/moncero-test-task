@@ -1,31 +1,41 @@
 export const fetchData = async <T, P>(url: string, params?: P): Promise<T> => {
   try {
+    // Handle query parameters safely
     const queryString = params
       ? `?${new URLSearchParams(
           Object.fromEntries(
             Object.entries(params).map(([key, value]) => [key, String(value)])
           )
         ).toString()}`
-      : "";
+      : '';
 
-    const response = await fetch(url + queryString, {
-      method: "GET",
+    const fullUrl = url + queryString; // Final URL to log
+    console.log("Final URL:");  // Log the final URL for debugging
+
+    // Perform the fetch request
+    const response = await fetch(fullUrl, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
-    // console.log(response);
 
+    // Log raw response
+    console.log("Raw response:");
+
+    // Handle HTTP errors
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`HTTP Error ${response.status}: ${errorText}`);
     }
+
+    // Parse JSON response
     const data = await response.json();
-    // console.log(data);
-    
-    return (data?.data ?? data) as T;
+    console.log("Parsed data:");
+
+    return data;  // Ensure you're accessing correct data structure
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     throw error;
   }
 };

@@ -16,11 +16,26 @@ export const getChartData = async ({
     interval,
   };
 
-  const data = await fetchData<ChartData[], typeof params>(url, params);
+  try {
+    // Fetch data
+    const data = await fetchData<ChartData[], typeof params>(url, params);
 
-  //   return data.map(item => ({
-  //     time: new Date(item.time).toLocaleString(),
-  //     priceUsd: item.priceUsd,
-  //   }));
-  return data;
+    // Log the raw data to inspect it
+    console.log("Raw data:", data);
+
+    // Ensure data is an array
+    if (!Array.isArray(data)) {
+      console.error('Data is not an array:', data);
+      return [];
+    }
+
+    // Map over the data if it's an array
+    return data.map(item => ({
+      time: new Date(item.time).toLocaleString(),
+      priceUsd: item.priceUsd,
+    }));
+  } catch (error) {
+    console.error("Error fetching chart data:", error);
+    return [];
+  }
 };
