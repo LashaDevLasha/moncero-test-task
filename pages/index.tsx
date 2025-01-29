@@ -1,28 +1,49 @@
-import { getCryptoAssets } from "@/services/table/cryptoAsset"; 
-import { CryptoAsset } from "@/services/table/types"; 
-import styles from "@/styles/Home.module.css";
+import CustomCard from "@/components/UI/CustomCard";
+import Table from "@/components/UI/table/CustomTable";
+import { getCryptoAssets } from "@/services/table/cryptoAsset";
+import { CryptoAsset } from "@/services/table/types";
 
 interface HomeProps {
-  cryptoAssets: CryptoAsset[]; 
+  cryptoAssets: CryptoAsset[];
 }
 
 export default function Home({ cryptoAssets }: HomeProps) {
+  const columns = [
+    {
+      key: "1",
+      title: "Name",
+      dataIndex: "name",
+      sorter: (a: CryptoAsset, b: CryptoAsset) => {
+        if (a.name > b.name) return 1;
+        if (a.name < b.name) return -1;
+        return 0;
+      },
+    },
+    {
+      key: "2",
+      title: "Symbol",
+      dataIndex: "symbol",
+    },
+    {
+      key: "3",
+      title: "Price",
+      dataIndex: "priceUsd",
+    },
+    {
+      key: "3",
+      title: "24h Volume",
+      dataIndex: "changePercent24Hr",
+    },
+  ];
   return (
     <>
-      <main className={styles.main}>
-        <button onClick={() => console.log(cryptoAssets)}>data</button>
-        <h1>Crypto Assets</h1>
-        {cryptoAssets.length === 0 ? (
-          <p>No data available</p>
-        ) : (
-          <ul>
-            {cryptoAssets.map((asset) => (
-              <li key={asset.id}>
-                {asset.name} ({asset.symbol}) - ${asset.priceUsd}
-              </li>
-            ))}
-          </ul>
-        )}
+      <main>
+        <CustomCard>
+          <button onClick={() => console.log(cryptoAssets)}>data</button>
+          <h1>Crypto Assets</h1>
+
+          <Table columns={columns} data={cryptoAssets} />
+        </CustomCard>
       </main>
     </>
   );
