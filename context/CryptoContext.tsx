@@ -1,14 +1,18 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from "react";
 
 interface CryptoAsset {
   id: string;
   rank: string;
   symbol: string;
   name: string;
+  supply: string;
+  maxSupply: string | null;
+  marketCapUsd: string;
+  volumeUsd24Hr: string;
   priceUsd: string;
   changePercent24Hr: string;
-  marketCapUsd: string;
   vwap24Hr: string;
+  [key: string]: string | number | null;
 }
 
 interface CryptoContextType {
@@ -21,7 +25,7 @@ const CryptoContext = createContext<CryptoContextType | undefined>(undefined);
 export const useCryptoContext = () => {
   const context = useContext(CryptoContext);
   if (!context) {
-    throw new Error('useCryptoContext must be used within a CryptoProvider');
+    throw new Error("useCryptoContext must be used within a CryptoProvider");
   }
   return context;
 };

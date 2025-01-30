@@ -4,12 +4,15 @@ import LineChart from "@/components/UI/LineChart";
 import { getChartData } from "@/services/chart/charts";
 
 const Chart: React.FC = () => {
-  const [labels] = useState<string[]>([]);
-  const [data, setData] = useState<number[]>([]); 
+  const [labels, setLabels] = useState<string[]>([]);
+  const [data, setData] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  const interval = "h1"; 
+  const interval = "d1"; 
+
+  const currentTimestamp = Date.now(); 
+  const sevenDaysAgoTimestamp = currentTimestamp - 7 * 24 * 60 * 60 * 1000;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,24 +20,16 @@ const Chart: React.FC = () => {
         const chartData = await getChartData({
           assetId: "bitcoin",
           interval,
+          start: sevenDaysAgoTimestamp, 
+          end: currentTimestamp, 
         });
-        // console.log(chartData);
+        console.log(chartData);
 
-        // const timeLabels = chartData.map((item) => {
-        //   const date = new Date(item.time); 
+        const priceData = chartData.data.map((item) => parseFloat(item.priceUsd));
+        const timeLabels = chartData.data.map((item) => new Date(item.time).toLocaleDateString()); 
 
-        //   if (interval === "d1") {
-        //     const hours = date.getHours();
-        //     return `${hours}:00`; 
-        //   } else {
-        //     return date.toLocaleString();
-        //   }
-        // });
-
-        const priceData = chartData.map((item) => parseFloat(item.priceUsd));
-
-        // setLabels(timeLabels);
-        setData(priceData);
+        setLabels(timeLabels); 
+        setData(priceData); 
       } catch (error) {
         console.log(error);
         setError("Error fetching chart data");
@@ -52,7 +47,7 @@ const Chart: React.FC = () => {
   const title = "Crypto Price Trend"; 
 
   return (
-    <main className={styles.main} style={{marginTop: "100px"}}>
+    <main className={styles.main} style={{ marginTop: "100px" }}>
       <LineChart labels={labels} data={data} title={title} />
     </main>
   );
