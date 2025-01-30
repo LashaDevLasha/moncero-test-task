@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card } from 'antd/lib';
 
 interface CustomCardProps {
   children: React.ReactNode;

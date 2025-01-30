@@ -47,8 +47,8 @@ export default function Home({ cryptoAssets }: HomeProps) {
           <div style={{ display: "flex", alignItems: "center" }}>
             {/* <button onClick={() => console.log(iconPath)}>record</button> */}
             <Image src={iconPath} alt={`${name} icon`} width={24} height={24} />
-            <span style={{ marginLeft: 8 }}>{name}</span>
-            <span style={{ marginLeft: 8 }}>({record.symbol})</span>
+            <span key={name} style={{ marginLeft: 8 }}>{name}</span>
+            <span key={record.symbol} style={{ marginLeft: 8 }}>({record.symbol})</span>
           </div>
         );
       },

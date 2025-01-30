@@ -1,8 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+import withTM from 'next-transpile-modules';
 
+// Use `withTM` to specify the modules to transpile
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
 };
 
-export default nextConfig;
+// Export the configuration wrapped by `withTM`
+export default withTM(['@ant-design/icons-svg'])(nextConfig);

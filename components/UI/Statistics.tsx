@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Statistic } from "antd";
+import { Statistic } from "antd/lib";
 
 interface StatisticsProps {
   value: string;

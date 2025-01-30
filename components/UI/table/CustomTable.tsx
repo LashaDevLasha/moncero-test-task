@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "antd";
+import { Table } from "antd/lib";
 import type { ColumnType } from "antd/es/table";
 
 interface DataTableProps<T> {
