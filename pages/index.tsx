@@ -3,6 +3,7 @@ import Statistics from "@/components/UI/Statistics";
 import Table from "@/components/UI/table/CustomTable";
 import { useCryptoContext } from "@/context/CryptoContext";
 import { getChartData } from "@/services/chart/charts";
+import { useSocketCryptoPrices } from "@/services/socketCryptoPrices";
 import { getCryptoAssets } from "@/services/table/cryptoAsset";
 import { CryptoAsset } from "@/services/table/types";
 import { formatCurrency } from "@/utils/helper";
@@ -11,9 +12,10 @@ import { useCallback, useEffect, useState } from "react";
 
 interface HomeProps {
   initialcryptoAssets: CryptoAsset[];
+  cryptoIds: string[];
 }
 
-export default function Home({ initialcryptoAssets }: HomeProps) {
+export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   const { cryptoAssets, setCryptoAssets } = useCryptoContext();
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
 
@@ -22,9 +24,20 @@ export default function Home({ initialcryptoAssets }: HomeProps) {
     const sortedAssets = response.sort(
       (a, b) => parseFloat(b.marketCapUsd) - parseFloat(a.marketCapUsd)
     );
+
     const cryptoAssets = sortedAssets.slice(0, 10);
-    setCryptoAssets(cryptoAssets);
-  }, [setCryptoAssets]);
+
+    if (selectedPeriod !== "24h") {
+      setCryptoAssets((prevAssets) =>
+        prevAssets.map((asset, index) => ({
+          ...cryptoAssets[index],
+          changePercent24Hr: asset.changePercent24Hr,
+        }))
+      );
+    } else {
+      setCryptoAssets(cryptoAssets);
+    }
+  }, [selectedPeriod, setCryptoAssets]);
 
   useEffect(() => {
     setCryptoAssets(initialcryptoAssets);
@@ -108,6 +121,22 @@ export default function Home({ initialcryptoAssets }: HomeProps) {
     return () => clearInterval(interval);
   }, [fetchCryptoAssets]);
 
+  // const handlePriceUpdate = (newPrices: { [key: string]: string }) => {
+  //   console.log("Received data from WebSocket:", newPrices);
+  // };
+  const handlePriceUpdate = (newPrices: { [key: string]: string }) => {
+    console.log("Received data from WebSocket:", newPrices);
+
+    setCryptoAssets((prevAssets) =>
+      prevAssets.map((asset) => ({
+        ...asset,
+        priceUsd: newPrices[asset.id] ? newPrices[asset.id] : asset.priceUsd,
+      }))
+    );
+  };
+
+  useSocketCryptoPrices(cryptoIds, handlePriceUpdate);
+
   const columns = [
     {
       key: "1",
@@ -115,17 +144,27 @@ export default function Home({ initialcryptoAssets }: HomeProps) {
       dataIndex: "name",
       canSort: true,
       canFilter: true,
-      render: (name: string, record: CryptoAsset) => {
+      filterSearch: true,
+      render: (name: string, record: CryptoAsset, index: number) => {
         const iconPath = `/${record.id.toLowerCase()}.png`;
 
         return (
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{ display: "flex", alignItems: "center" }}
+            key={record.id}
+          >
             {/* <button onClick={() => console.log(iconPath)}>record</button> */}
-            <Image src={iconPath} alt={`${name} icon`} width={24} height={24} />
-            <span key={name} style={{ marginLeft: 8 }}>
+            <Image
+              src={iconPath}
+              alt={`${name} icon`}
+              width={24}
+              height={24}
+              key={`${record.id}-${index}`}
+            />
+            <span key={`${name}-${index}`} style={{ marginLeft: 8 }}>
               {name}
             </span>
-            <span key={record.symbol} style={{ marginLeft: 8 }}>
+            <span key={index} style={{ marginLeft: 8 }}>
               ({record.symbol})
             </span>
           </div>
@@ -183,11 +222,13 @@ export async function getServerSideProps() {
     (a, b) => parseFloat(b.marketCapUsd) - parseFloat(a.marketCapUsd)
   );
   const initialcryptoAssets = sortedAssets.slice(0, 10);
+  const cryptoIds = initialcryptoAssets.map((asset) => asset.id);
   console.log(initialcryptoAssets);
 
   return {
     props: {
       initialcryptoAssets,
+      cryptoIds,
     },
   };
 }

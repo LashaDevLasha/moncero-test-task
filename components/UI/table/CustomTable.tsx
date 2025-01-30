@@ -30,7 +30,7 @@ const CustomTable = <T extends Record<string, unknown>>({ columns, data }: DataT
           }
           return 0;
         },
-        sortDirections: ['ascend', 'descend'],
+        // sortDirections: ['ascend', 'descend'],
       };
     }
 
@@ -40,11 +40,13 @@ const CustomTable = <T extends Record<string, unknown>>({ columns, data }: DataT
 
       modifiedColumn = {
         ...modifiedColumn,
-        filters: uniqueValues.map((value) => ({
+        filters: uniqueValues.map((value, index) => ({
           text: String(value),
           value: String(value),
+          key: `${String(value)}-${index}`,
         })),
         onFilter: (value, record) => record[dataIndex] === value,
+        
       };
     }
 
