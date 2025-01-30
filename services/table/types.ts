@@ -10,4 +10,5 @@ export interface CryptoAsset {
   priceUsd: string;
   changePercent24Hr: string;
   vwap24Hr: string;
+  [key: string]: string | number | null; 
 }

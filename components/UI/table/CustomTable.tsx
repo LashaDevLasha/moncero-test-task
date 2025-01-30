@@ -1,33 +1,57 @@
-import React from 'react';
-import { Table } from 'antd';
-import type { TableProps } from 'antd';
+import React from "react";
+import { Table } from "antd";
+import type { ColumnType } from "antd/es/table";
 
 interface DataTableProps<T> {
-  columns: TableProps<T>['columns'];
+  columns: (ColumnType<T> & { canSort?: boolean; canFilter?: boolean })[];
   data: T[];
-  sortable?: boolean;  // Optional sortable flag
 }
 
-const CustomTable = <T extends object>({ columns, data, sortable }: DataTableProps<T>) => {
-  // If sortable is true, ensure all columns are sortable
-  const modifiedColumns = columns?.map((column) => ({
-    ...column,
-    sorter: sortable
-      ? (a: T, b: T) => {
-          if ('dataIndex' in column) {
-            const aValue = a[column.dataIndex as keyof T];
-            const bValue = b[column.dataIndex as keyof T];
-            // Handle sorting for various data types (numbers, strings)
-            if (aValue > bValue) return 1;
-            if (aValue < bValue) return -1;
-            return 0;
+const CustomTable = <T extends Record<string, unknown>>({ columns, data }: DataTableProps<T>) => {
+  const modifiedColumns = columns?.map((column) => {
+    let modifiedColumn = { ...column };
+
+    if (column.canSort) {
+      modifiedColumn = {
+        ...modifiedColumn,
+        sorter: (a: T, b: T) => {
+          const dataIndex = column.dataIndex as keyof T;
+          const aValue = a[dataIndex];
+          const bValue = b[dataIndex];
+
+          if (typeof aValue === "number" && typeof bValue === "number") {
+            return aValue - bValue;
+          }
+          if (typeof aValue === "string" && typeof bValue === "string") {
+            return aValue.localeCompare(bValue);
+          }
+          if (aValue instanceof Date && bValue instanceof Date) {
+            return aValue.getTime() - bValue.getTime();
           }
           return 0;
-        }
-      : column.sorter, // Retain any existing sorter logic if provided
-  }));
+        },
+        sortDirections: ['ascend', 'descend'],
+      };
+    }
 
-  return <Table<T> columns={modifiedColumns} dataSource={data} />;
+    if (column.canFilter) {
+      const dataIndex = column.dataIndex as keyof T;
+      const uniqueValues = Array.from(new Set(data.map((item) => item[dataIndex])));
+
+      modifiedColumn = {
+        ...modifiedColumn,
+        filters: uniqueValues.map((value) => ({
+          text: String(value),
+          value: String(value),
+        })),
+        onFilter: (value, record) => record[dataIndex] === value,
+      };
+    }
+
+    return modifiedColumn;
+  });
+
+  return <Table<T> columns={modifiedColumns} dataSource={data} pagination={false} />;
 };
 
 export default CustomTable;
