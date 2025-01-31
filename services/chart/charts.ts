@@ -9,9 +9,7 @@ export const getChartData = async ({
   interval,
   start,
   end,
-}: ChartParams & { start?: number; end?: number }): Promise<
-  ChartResponse
-> => {
+}: ChartParams & { start?: number; end?: number }): Promise<ChartResponse> => {
   const url = `${URL}${assetId}/history`;
 
   const params: { interval: string; start?: number; end?: number } = {
@@ -24,7 +22,7 @@ export const getChartData = async ({
   try {
     const data = await fetchData<ChartResponse, typeof params>(url, params);
     return data;
-  } catch (error) {
+  } catch (error) { 
     console.error("Error fetching chart data:", error);
     return { data: [], timestamp: 0 };
   }

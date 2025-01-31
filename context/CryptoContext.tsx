@@ -1,24 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-
-interface CryptoAsset {
-  id: string;
-  rank: string;
-  symbol: string;
-  name: string;
-  supply: string;
-  maxSupply: string | null;
-  marketCapUsd: string;
-  volumeUsd24Hr: string;
-  priceUsd: string;
-  changePercent24Hr: string;
-  vwap24Hr: string;
-  [key: string]: string | number | null;
-}
-
-interface CryptoContextType {
-  cryptoAssets: CryptoAsset[];
-  setCryptoAssets: React.Dispatch<React.SetStateAction<CryptoAsset[]>>;
-}
+import { CryptoAsset, CryptoContextType, CryptoInfo } from "./types";
 
 const CryptoContext = createContext<CryptoContextType | undefined>(undefined);
 
@@ -36,9 +17,12 @@ interface CryptoProviderProps {
 
 export const CryptoProvider: React.FC<CryptoProviderProps> = ({ children }) => {
   const [cryptoAssets, setCryptoAssets] = useState<CryptoAsset[]>([]);
+  const [cryptoInfo, setCryptoInfo] = useState<CryptoInfo[]>([]);
 
   return (
-    <CryptoContext.Provider value={{ cryptoAssets, setCryptoAssets }}>
+    <CryptoContext.Provider
+      value={{ cryptoAssets, setCryptoAssets, cryptoInfo, setCryptoInfo }}
+    >
       {children}
     </CryptoContext.Provider>
   );

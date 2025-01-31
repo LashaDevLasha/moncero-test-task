@@ -1,4 +1,5 @@
 import CustomCard from "@/components/UI/CustomCard";
+import SelectPeriod from "@/components/UI/SelectPeriod";
 import Statistics from "@/components/UI/Statistics";
 import Table from "@/components/UI/table/CustomTable";
 import { useCryptoContext } from "@/context/CryptoContext";
@@ -121,12 +122,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
     return () => clearInterval(interval);
   }, [fetchCryptoAssets]);
 
-  // const handlePriceUpdate = (newPrices: { [key: string]: string }) => {
-  //   console.log("Received data from WebSocket:", newPrices);
-  // };
   const handlePriceUpdate = (newPrices: { [key: string]: string }) => {
-    console.log("Received data from WebSocket:", newPrices);
-
     setCryptoAssets((prevAssets) =>
       prevAssets.map((asset) => ({
         ...asset,
@@ -181,23 +177,14 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
     {
       key: "3",
       dataIndex: "",
-      canSort: true,
+      // canSort: true,
       render: (record: CryptoAsset) => (
         <Statistics value={record.changePercent24Hr} />
       ),
       title: (
         <>
           Change
-          <select
-            defaultValue="24h"
-            style={{ width: 120, marginLeft: 8 }}
-            onClick={(e) => e.stopPropagation()}
-            onChange={handlePeriodChange}
-          >
-            <option value="24h">24 Hours</option>
-            <option value="7d">7 Days</option>
-            <option value="30d">30 Days</option>
-          </select>
+          <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
         </>
       ),
     },
@@ -223,7 +210,7 @@ export async function getServerSideProps() {
   );
   const initialcryptoAssets = sortedAssets.slice(0, 10);
   const cryptoIds = initialcryptoAssets.map((asset) => asset.id);
-  console.log(initialcryptoAssets);
+  // console.log(initialcryptoAssets);
 
   return {
     props: {

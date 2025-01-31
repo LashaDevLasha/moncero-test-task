@@ -1,17 +1,18 @@
 export interface ChartData {
   time: string;
   priceUsd: string;
-  date: string;
+  date?: string;
+  circulatingSupply?: string;
 }
 
 export interface ChartResponse {
-  data: ChartData[]; 
+  data: ChartData[];
   timestamp: number;
 }
 
 export interface ChartParams {
   assetId: string;
-  interval: "d1" | "h1" | "m1";
+  interval: "d1" | "h1";
   start: number;
   end: number;
 }
