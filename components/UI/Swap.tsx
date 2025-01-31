@@ -1,15 +1,15 @@
 import { ArrowDownOutlined, CaretDownOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import Image from "next/image";
-import { Modal } from "antd"; 
+import { Modal } from "antd/lib";
 
 interface SwapProps {
   cryptoIds: string[];
 }
 
-export default function Swap({ cryptoIds }: SwapProps) {
+const Swap: React.FC<SwapProps> = ({ cryptoIds }) => {
   const [isSwitched, setIsSwitched] = useState(false);
-  const [modalType, setModalType] = useState<"FROM" | "TO" | null>(null); 
+  const [modalType, setModalType] = useState<"FROM" | "TO" | null>(null);
 
   const switchBoxes = () => {
     setIsSwitched(!isSwitched);
@@ -20,14 +20,13 @@ export default function Swap({ cryptoIds }: SwapProps) {
   };
 
   const closeModal = () => {
-    setModalType(null); 
+    setModalType(null);
   };
 
   return (
     <div className="tradeBox">
       <div className="switchBox">
         <span className="boxLabel">FROM</span>
-
         <div className="select-div" onClick={() => openModal("FROM")}>
           {isSwitched ? (
             <>
@@ -100,7 +99,7 @@ export default function Swap({ cryptoIds }: SwapProps) {
         title={`Select Token - ${modalType}`}
         open={modalType !== null}
         onCancel={closeModal}
-        footer={null} 
+        footer={null}
       >
         <div className="modalContent">
           <p>Select a token for {modalType}</p>
@@ -108,4 +107,6 @@ export default function Swap({ cryptoIds }: SwapProps) {
       </Modal>
     </div>
   );
-}
+};
+
+export default Swap;

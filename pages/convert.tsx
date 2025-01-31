@@ -16,7 +16,7 @@ export default function Convert({ initialcryptoAssets }: ConvertProps) {
     setCryptoAssets(initialcryptoAssets);
   }, [initialcryptoAssets, setCryptoAssets]);
 
-  const cryptoIds = initialcryptoAssets.map((asset) => asset.id);
+  const cryptoIds = initialcryptoAssets.map((asset) => asset.id) || [];
 
   return (
     <>
