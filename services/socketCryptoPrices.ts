@@ -20,6 +20,7 @@ export const useSocketCryptoPrices = (
 
       pricesWs.onmessage = (msg) => {
         const data = JSON.parse(msg.data);
+        // console.log(data)
         onPriceUpdate(data);
       };
 

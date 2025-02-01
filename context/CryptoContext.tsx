@@ -18,10 +18,24 @@ interface CryptoProviderProps {
 export const CryptoProvider: React.FC<CryptoProviderProps> = ({ children }) => {
   const [cryptoAssets, setCryptoAssets] = useState<CryptoAsset[]>([]);
   const [cryptoInfo, setCryptoInfo] = useState<CryptoInfo[]>([]);
+  const [selectedCryptoFROM, setSelectedCryptoFROM] =
+    useState<CryptoAsset | null>(null);
+  const [selectedCryptoTO, setSelectedCryptoTO] = useState<CryptoAsset | null>(
+    null
+  );
 
   return (
     <CryptoContext.Provider
-      value={{ cryptoAssets, setCryptoAssets, cryptoInfo, setCryptoInfo }}
+      value={{
+        cryptoAssets,
+        setCryptoAssets,
+        cryptoInfo,
+        setCryptoInfo,
+        selectedCryptoFROM,
+        setSelectedCryptoFROM,
+        selectedCryptoTO,
+        setSelectedCryptoTO,
+      }}
     >
       {children}
     </CryptoContext.Provider>

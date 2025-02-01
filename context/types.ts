@@ -23,4 +23,8 @@ export interface CryptoContextType {
   setCryptoAssets: React.Dispatch<React.SetStateAction<CryptoAsset[]>>;
   cryptoInfo: CryptoInfo[];
   setCryptoInfo: React.Dispatch<React.SetStateAction<CryptoInfo[]>>;
+  selectedCryptoFROM: CryptoAsset | null;
+  setSelectedCryptoFROM: React.Dispatch<React.SetStateAction<CryptoAsset | null>>;
+  selectedCryptoTO: CryptoAsset | null;
+  setSelectedCryptoTO: React.Dispatch<React.SetStateAction<CryptoAsset | null>>;
 }

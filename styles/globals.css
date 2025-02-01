@@ -31,7 +31,6 @@ body {
   width: 90%;
   height: 100px;
   background-color: rgb(25, 33, 52);
-  position: relative;
 }
 
 .boxLabel{
@@ -63,7 +62,6 @@ body {
   min-width: 50px;
   height: 30px;
   background-color: #3a4157;
-  position: absolute;
   top: 36px;
   right: 20px;
   border-radius: 100px;
@@ -82,4 +80,19 @@ body {
 
 .downArrow{
   color: white;
+}
+.middle-input-div{
+  /* background-color: aqua; */
+  height: 60%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.crypto-input {
+  background-color: rgb(25, 33, 52);
+  color: white;
+  font-size: 17px;
+  /* border: none;
+  outline: none;  */
 }
