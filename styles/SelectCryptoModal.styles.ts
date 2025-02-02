@@ -63,3 +63,5 @@ export const CryptoId = styled.strong`
   font-size: 14px;
   color: gray;
 `;
+
+

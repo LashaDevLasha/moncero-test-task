@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import styles from "@/styles/Chart.module.css";
 import LineChart from "@/components/UI/LineChart";
 import { getChartData } from "@/services/chart/charts";
 import SelectPeriod from "@/components/UI/SelectPeriod";
@@ -7,6 +6,14 @@ import { useCryptoContext } from "@/context/CryptoContext";
 import { getCryptoAssets } from "@/services/table/cryptoAsset";
 import { CryptoAsset } from "@/context/types";
 import SelectCryptoModal from "@/components/convert/SelectCryptoModal";
+import {
+  ChartContainer,
+  PeriodContainer,
+  StyledButton,
+  StyledHeaderDiv,
+  StyledLabel,
+} from "@/styles/chart.styles";
+import { Spin } from "antd/lib";
 
 interface ChartProps {
   chartData: {
@@ -21,8 +28,10 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
   const [data, setData] = useState<number[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
   const [selectedCrypto, setSelectedCrypto] = useState<string>("bitcoin");
-  const { cryptoInfo, setCryptoInfo, setCryptoAssets } = useCryptoContext();
+  const [selectedCryptoName, setSelectedCryptoName] = useState<string>("Bitcoin");
+  const { setCryptoInfo, setCryptoAssets } = useCryptoContext();
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
   useEffect(() => {
     setCryptoAssets(initialcryptoAssets);
@@ -67,18 +76,15 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
     if (selectedPeriod === "24h") {
       startTimestamp = currentTimestamp - 24 * 60 * 60 * 1000;
     } else if (selectedPeriod === "7d") {
-      startTimestamp = new Date(
-        currentTimestamp - 7 * 24 * 60 * 60 * 1000
-      ).setHours(0, 0, 0, 0);
+      startTimestamp = new Date(currentTimestamp - 7 * 24 * 60 * 60 * 1000).setHours(0, 0, 0, 0);
     } else if (selectedPeriod === "30d") {
-      startTimestamp = new Date(
-        currentTimestamp - 30 * 24 * 60 * 60 * 1000
-      ).setHours(0, 0, 0, 0);
+      startTimestamp = new Date(currentTimestamp - 30 * 24 * 60 * 60 * 1000).setHours(0, 0, 0, 0);
     } else {
       startTimestamp = currentTimestamp - 24 * 60 * 60 * 1000;
     }
 
     const fetchData = async () => {
+      setLoading(true); // Start loading
       try {
         const response = await getChartData({
           assetId: selectedCrypto,
@@ -108,15 +114,13 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
         setData(formattedData);
       } catch (error) {
         console.error("Error fetching chart data:", error);
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
 
     fetchData();
   }, [selectedCrypto, selectedPeriod]);
-
-  const handleCryptoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCrypto(event.target.value);
-  };
 
   const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedPeriod(event.target.value);
@@ -132,27 +136,29 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
 
   const handleSelectCrypto = (crypto: CryptoAsset) => {
     setSelectedCrypto(crypto.id);
+    setSelectedCryptoName(crypto.name);
     setModalVisible(false);
   };
 
   return (
-    <div className="chart-cointainer">
-      <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
-      <div>
-        <label htmlFor="cryptoSelect">Select Crypto:</label>
-        <select
-          id="cryptoSelect"
-          value={selectedCrypto}
-          onChange={handleCryptoChange}
-        >
-          {cryptoInfo?.map((crypto) => (
-            <option key={crypto.id} value={crypto.id}>
-              {crypto.name}
-            </option>
-          ))}
-        </select>
-        <button onClick={handleOpenModal}>Select Crypto</button>
-      </div>
+    <ChartContainer>
+      <StyledHeaderDiv>
+        <StyledLabel htmlFor="cryptoSelect">
+          {selectedCryptoName
+            ? ` ${selectedCryptoName} prices for the last ${
+                selectedPeriod === "24h"
+                  ? "24 hours"
+                  : selectedPeriod === "7d"
+                  ? "7 days"
+                  : "30 days"
+              }`
+            : "Select Crypto"}
+        </StyledLabel>
+        <PeriodContainer>
+          <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
+          <StyledButton onClick={handleOpenModal}>Select Crypto</StyledButton>
+        </PeriodContainer>
+      </StyledHeaderDiv>
 
       <SelectCryptoModal
         modalVisible={modalVisible}
@@ -160,9 +166,12 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
         onSelectCrypto={handleSelectCrypto}
         excludedAssets={[]}
       />
-
-      <LineChart labels={labels} data={data} title="Crypto Price Trend" />
-    </div>
+      {loading ? (
+        <Spin size="large" style={{ display: "block", margin: "auto", paddingTop: "50px" }} />
+      ) : (
+        <LineChart labels={labels} data={data} title="Crypto Price Trend" />
+      )}
+    </ChartContainer>
   );
 };
 

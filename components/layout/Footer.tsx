@@ -1,10 +1,13 @@
-import styles from "@/styles/Footer.module.css";
+import React from "react";
+import { Footer as StyledFooter, Text as StyledText } from "@/styles/Footer.styles"; 
 
 const Footer: React.FC = () => {
   return (
-    <footer className="footer">
-      <p className={styles.text}>© 2025 Moncero. All rights reserved.</p>
-    </footer>
+    <StyledFooter>
+      <StyledText> 
+        © 2025 Moncero. All rights reserved.
+      </StyledText>
+    </StyledFooter>
   );
 };
 

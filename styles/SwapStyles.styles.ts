@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const TradeBox = styled.div`
-  max-width: 600px;
   background-color: #0e111b;
   border: 2px solid #21273a;
   min-height: 400px;
@@ -16,8 +15,8 @@ export const TradeBox = styled.div`
 
 export const SwitchButton = styled.div`
   background-color: #3a4157;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   align-items: center;
   justify-content: center;
   display: flex;

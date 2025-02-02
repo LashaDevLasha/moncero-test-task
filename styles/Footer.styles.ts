@@ -1,11 +1,13 @@
-.footer {
-  background-color: #333;
+import styled from 'styled-components';
+
+export const Footer = styled.footer`
   color: white;
   height: 4vh;
   padding: 0;
   margin: 0;
-}
-.text{
+`;
+
+export const Text = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,4 +15,4 @@
   margin: 0;
   padding: 0;
   color: white;
-}
+`;

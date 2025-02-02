@@ -1,11 +1,19 @@
 import React from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import useWindowSize from "@/hooks/window-size";
+import {
+  SwitchBox,
+  BoxLabel,
+  MiddleInputDiv,
+  CryptoInput,
+  SelectDiv,
+  DownArrow,
+  IconPlaceholder,
+} from "@/styles/CryptoSelector.styles";
 
 interface CryptoSelectorProps {
-  label: string; 
-  selectedItem: string; 
+  label: string;
+  selectedItem: string;
   onClick: () => void;
   inputValue: string;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,35 +31,36 @@ const CryptoSelector = ({
   const { width } = useWindowSize();
 
   return (
-    <div className="switchBox">
-      <span className="boxLabel">{label}:</span>
+    <SwitchBox>
+      <BoxLabel>{label}:</BoxLabel>
 
-      <div className="middle-input-div">
-        <input
+      <MiddleInputDiv>
+        <CryptoInput
           value={inputValue}
           onChange={onInputChange}
-          className="crypto-input"
           readOnly={false}
         />
-        <div className="select-div" onClick={onClick}>
+        <SelectDiv onClick={onClick}>
           {iconSrc ? (
             <Image
               src={iconSrc}
               alt={selectedItem}
               width={30}
               height={30}
-              priority
-              className="cryptoIcon"
+              style={{
+                marginRight: "5px",
+              }}
             />
           ) : (
-            <span className="icon-placeholder">🔑</span> 
+            <IconPlaceholder>🔑</IconPlaceholder>
           )}
-
-          {width >= 600 && <span className="cryptoId">{selectedItem}</span>}
-          <CaretDownOutlined className="downArrow" />
-        </div>
-      </div>
-    </div>
+          {width >= 600 && (
+            <span style={{ color: "white" }}>{selectedItem}</span>
+          )}
+          <DownArrow />
+        </SelectDiv>
+      </MiddleInputDiv>
+    </SwitchBox>
   );
 };
 

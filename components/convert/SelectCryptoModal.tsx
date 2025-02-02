@@ -11,7 +11,7 @@ import {
   TokenText,
   CryptoName,
   CryptoId,
-} from "./SelectCryptoModal.styles";
+} from "../../styles/SelectCryptoModal.styles";
 
 interface SelectCryptoModalProps {
   modalVisible: boolean;

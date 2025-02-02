@@ -1,26 +1,34 @@
-import React from 'react';
-import Link from 'next/link'; 
-import { useRouter } from 'next/router';
-import styles from '@/styles/Header.module.css'; 
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Header, Nav, StyledLink } from "@/styles/Header.styles";
 
-const Header: React.FC = () => {
-  const router = useRouter(); 
-  
+const Navbar: React.FC = () => {
+  const router = useRouter();
+
   return (
-    <header className="header">
-      <nav className={styles.nav}>
-        <Link href="/" className={`${styles.link} ${router.pathname === '/' ? styles.active : ''}`}>
-          Table
+    <Header>
+      <Nav>
+        <Link href="/" legacyBehavior style={{ textDecoration: "none" }}>
+          <StyledLink className={router.pathname === "/" ? "active" : ""}>
+            Table
+          </StyledLink>
         </Link>
-        <Link href="/convert" className={`${styles.link} ${router.pathname === '/convert' ? styles.active : ''}`}>
-          Convert
+        <Link href="/convert" legacyBehavior style={{ textDecoration: "none" }}>
+          <StyledLink
+            className={router.pathname === "/convert" ? "active" : ""}
+          >
+            Convert
+          </StyledLink>
         </Link>
-        <Link href="/chart" className={`${styles.link} ${router.pathname === '/chart' ? styles.active : ''}`}>
-          Chart
+        <Link href="/chart" legacyBehavior style={{ textDecoration: "none" }}>
+          <StyledLink className={router.pathname === "/chart" ? "active" : ""}>
+            Chart
+          </StyledLink>
         </Link>
-      </nav>
-    </header>
+      </Nav>
+    </Header>
   );
 };
 
-export default Header;
+export default Navbar;

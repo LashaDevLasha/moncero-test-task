@@ -3,7 +3,7 @@ import { ArrowDownOutlined } from "@ant-design/icons";
 import { useCryptoContext } from "@/context/CryptoContext";
 import CryptoSelector from "../UI/CryptoSelector";
 import SelectCryptoModal from "./SelectCryptoModal";
-import { SwitchButton, TradeBox } from "./SwapStyles.styles";
+import { SwitchButton, TradeBox } from "../../styles/SwapStyles.styles";
 
 
 

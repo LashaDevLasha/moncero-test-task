@@ -43,8 +43,6 @@ function LineChart({ labels, data, title }: LineChartProps) {
 
   const options = {
     plugins: {
-      // responsive: true,
-      // maintainAspectRatio: false,
       tooltip: {
         enabled: true,
         intersect: false,
@@ -53,7 +51,7 @@ function LineChart({ labels, data, title }: LineChartProps) {
             return `Value: ${tooltipItem.raw as number}`;
           },
         },
-      },
+      },  
     },
     hover: {
       mode: "nearest" as const,
@@ -63,18 +61,27 @@ function LineChart({ labels, data, title }: LineChartProps) {
       x: {
         grid: {
           display: true,
+          color: "rgba(255, 255, 255, 0.1)",
+        },
+        ticks: {
+          color: "white", 
         },
       },
       y: {
         grid: {
           display: true,
+          color: "rgba(255, 255, 255, 0.1)", 
+        },
+
+        ticks: {
+          color: "white", 
         },
       },
     },
   };
 
   return (
-    <div >
+    <div>
       <Line data={chartData} options={options} />
     </div>
   );
