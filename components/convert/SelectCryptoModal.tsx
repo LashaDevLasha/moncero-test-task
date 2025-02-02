@@ -1,7 +1,7 @@
 import { useCryptoContext } from "@/context/CryptoContext";
 import { CryptoAsset } from "@/context/types";
 import { filterCryptoAssets } from "@/utils/helper";
-import { Modal } from "antd";
+import { Modal } from "antd/lib";
 import React, { useState } from "react";
 import {
   ModalContent,
