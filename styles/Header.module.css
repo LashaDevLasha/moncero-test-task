@@ -1,8 +1,7 @@
 .header {
-  /* background-color: rgba(51, 51, 51, 0.2); */
+  background-color: white;
   color: #fff;
-  height: 5vh;
-  min-height: 5vh;
+  height: 4vh;
   padding: 0;
   margin: 0;
   display: flex;
@@ -10,7 +9,6 @@
   justify-content: flex-start;
   padding-left: 20px;
 }
-
 
 .nav {
   display: flex;
@@ -37,7 +35,6 @@
 
 @media (max-width: 600px) {
   .header {
-    height: auto;
     flex-direction: column;
     align-items: center;
   }

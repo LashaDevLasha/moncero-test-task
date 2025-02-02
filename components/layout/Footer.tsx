@@ -2,7 +2,7 @@ import styles from "@/styles/Footer.module.css";
 
 const Footer: React.FC = () => {
   return (
-    <footer className={styles.footer}>
+    <footer className="footer">
       <p className={styles.text}>© 2025 Moncero. All rights reserved.</p>
     </footer>
   );

@@ -43,6 +43,8 @@ function LineChart({ labels, data, title }: LineChartProps) {
 
   const options = {
     plugins: {
+      // responsive: true,
+      // maintainAspectRatio: false,
       tooltip: {
         enabled: true,
         intersect: false,
@@ -72,7 +74,7 @@ function LineChart({ labels, data, title }: LineChartProps) {
   };
 
   return (
-    <div style={{ width: "1200px", height: "auto" }}>
+    <div >
       <Line data={chartData} options={options} />
     </div>
   );

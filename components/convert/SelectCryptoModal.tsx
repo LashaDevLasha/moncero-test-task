@@ -1,63 +1,81 @@
 import { useCryptoContext } from "@/context/CryptoContext";
 import { CryptoAsset } from "@/context/types";
 import { filterCryptoAssets } from "@/utils/helper";
-import { Input } from "antd/lib";
+import { Modal } from "antd";
 import React, { useState } from "react";
+import {
+  ModalContent,
+  SearchInput,
+  TokenChoice,
+  CryptoIcon,
+  TokenText,
+  CryptoName,
+  CryptoId,
+} from "./SelectCryptoModal.styles";
 
 interface SelectCryptoModalProps {
+  modalVisible: boolean;
   onCancel: () => void;
   onSelectCrypto: (crypto: CryptoAsset) => void;
-  excludedAssets: string[]; // This will be passed from parent
+  excludedAssets: string[];
 }
 
 export default function SelectCryptoModal({
+  modalVisible,
   onCancel,
   onSelectCrypto,
-  excludedAssets, // Destructure excludedAssets from props
+  excludedAssets,
 }: SelectCryptoModalProps) {
   const { cryptoAssets } = useCryptoContext();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filter out the assets that are in the excludedAssets array
   const filteredAssets = filterCryptoAssets(
-    cryptoAssets.filter((asset) => !excludedAssets.includes(asset.id)), // Exclude the assets in excludedAssets
+    cryptoAssets.filter((asset) => !excludedAssets.includes(asset.id)),
     searchTerm
   );
 
   const handleSelectCrypto = (crypto: CryptoAsset) => {
-    onSelectCrypto(crypto); // This will invoke the function passed from parent
-    onCancel(); // Close modal after selection
+    onSelectCrypto(crypto);
+    onCancel();
   };
 
   return (
-    <div>
-      <Input
-        type="text"
-        placeholder="Search cryptocurrency..."
-        value={searchTerm}
-        allowClear
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "8px",
-          marginBottom: "10px",
-          borderRadius: "5px",
-          border: "1px solid #ccc",
-        }}
-      />
-
-      {filteredAssets?.map((asset) => (
+    <Modal
+      title={`Select CryptoCurrency`}
+      open={modalVisible}
+      onCancel={onCancel}
+      footer={null}
+      style={{ color: "white" }}
+    >
+      <ModalContent>
         <div
-          key={asset.id}
-          style={{ padding: "8px", borderBottom: "1px solid #eee" }}
-          onClick={() => handleSelectCrypto(asset)} // When an asset is clicked, call handleSelectCrypto
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
         >
-          <p>
-            <strong>ID:</strong> {asset.id} <br />
-            <strong>Name:</strong> {asset.name}
-          </p>
+          <SearchInput
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      ))}
-    </div>
+
+        {filteredAssets?.map((asset) => (
+          <TokenChoice key={asset.id} onClick={() => handleSelectCrypto(asset)}>
+            <CryptoIcon
+              src={`/${asset.id}.png`}
+              alt={asset.name}
+              width={50}
+              height={50}
+              priority
+            />
+            <TokenText>
+              <CryptoName>{asset.name}</CryptoName>
+              <br />
+              <CryptoId>{asset.id}</CryptoId>
+            </TokenText>
+          </TokenChoice>
+        ))}
+      </ModalContent>
+    </Modal>
   );
 }

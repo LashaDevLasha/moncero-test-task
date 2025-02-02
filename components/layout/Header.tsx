@@ -7,7 +7,7 @@ const Header: React.FC = () => {
   const router = useRouter(); 
   
   return (
-    <header className={styles.header}>
+    <header className="header">
       <nav className={styles.nav}>
         <Link href="/" className={`${styles.link} ${router.pathname === '/' ? styles.active : ''}`}>
           Table

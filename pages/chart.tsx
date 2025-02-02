@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styles from "@/styles/Chart.module.css";
+// import styles from "@/styles/Chart.module.css";
 import LineChart from "@/components/UI/LineChart";
 import { getChartData } from "@/services/chart/charts";
 import SelectPeriod from "@/components/UI/SelectPeriod";
 import { useCryptoContext } from "@/context/CryptoContext";
 import { getCryptoAssets } from "@/services/table/cryptoAsset";
 import { CryptoAsset } from "@/context/types";
+import SelectCryptoModal from "@/components/convert/SelectCryptoModal";
 
 interface ChartProps {
   chartData: {
@@ -20,7 +21,12 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
   const [data, setData] = useState<number[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
   const [selectedCrypto, setSelectedCrypto] = useState<string>("bitcoin");
-  const { cryptoInfo, setCryptoInfo } = useCryptoContext();
+  const { cryptoInfo, setCryptoInfo, setCryptoAssets } = useCryptoContext();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    setCryptoAssets(initialcryptoAssets);
+  }, [initialcryptoAssets, setCryptoAssets]);
 
   useEffect(() => {
     const cryptoInfo = initialcryptoAssets.map((asset) => ({
@@ -58,21 +64,18 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
     const currentTimestamp = Date.now();
     let startTimestamp: number;
 
-    // Adjust start date to the beginning of the selected period
     if (selectedPeriod === "24h") {
-      startTimestamp = currentTimestamp - 24 * 60 * 60 * 1000; // 24 hours ago
+      startTimestamp = currentTimestamp - 24 * 60 * 60 * 1000;
     } else if (selectedPeriod === "7d") {
-      // Start from midnight of the 7 days ago
       startTimestamp = new Date(
         currentTimestamp - 7 * 24 * 60 * 60 * 1000
       ).setHours(0, 0, 0, 0);
     } else if (selectedPeriod === "30d") {
-      // Start from midnight of the 30 days ago
       startTimestamp = new Date(
         currentTimestamp - 30 * 24 * 60 * 60 * 1000
       ).setHours(0, 0, 0, 0);
     } else {
-      startTimestamp = currentTimestamp - 24 * 60 * 60 * 1000; // Default to 24 hours
+      startTimestamp = currentTimestamp - 24 * 60 * 60 * 1000;
     }
 
     const fetchData = async () => {
@@ -119,8 +122,21 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
     setSelectedPeriod(event.target.value);
   };
 
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleSelectCrypto = (crypto: CryptoAsset) => {
+    setSelectedCrypto(crypto.id);
+    setModalVisible(false);
+  };
+
   return (
-    <main className={styles.main} style={{ marginTop: "100px" }}>
+    <div className="chart-cointainer">
       <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
       <div>
         <label htmlFor="cryptoSelect">Select Crypto:</label>
@@ -135,9 +151,18 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
             </option>
           ))}
         </select>
+        <button onClick={handleOpenModal}>Select Crypto</button>
       </div>
+
+      <SelectCryptoModal
+        modalVisible={modalVisible}
+        onCancel={handleCloseModal}
+        onSelectCrypto={handleSelectCrypto}
+        excludedAssets={[]}
+      />
+
       <LineChart labels={labels} data={data} title="Crypto Price Trend" />
-    </main>
+    </div>
   );
 };
 

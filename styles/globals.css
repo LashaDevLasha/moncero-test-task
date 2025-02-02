@@ -7,14 +7,22 @@ body {
     rgba(7, 8, 21, 1) 75%
   );
   max-width: 100vw;
+  min-height: 100vh;
+  height: 100%;
   overflow-x: hidden;
   margin: 0;
-  padding: 0;
   box-sizing: border-box;
+}
+main {
+  min-height: 92vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  color: white;
 }
 
 .tradeBox {
-  width: 500px;
+  max-width: 600px;
   background-color: #0e111b;
   border: 2px solid #21273a;
   min-height: 400px;
@@ -25,15 +33,21 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .switchBox {
   width: 90%;
   height: 100px;
   background-color: rgb(25, 33, 52);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 30px;
 }
 
-.boxLabel{
+.boxLabel {
   color: white;
 }
 
@@ -78,21 +92,98 @@ body {
   color: white;
 }
 
-.downArrow{
+.downArrow {
   color: white;
 }
-.middle-input-div{
-  /* background-color: aqua; */
+
+.middle-input-div {
+  margin-top: 20px;
   height: 60%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
 .crypto-input {
   background-color: rgb(25, 33, 52);
   color: white;
-  font-size: 17px;
-  /* border: none;
-  outline: none;  */
+  font-size: 24px;
+  border: none;
+  outline: none;
+  padding: none;
+  width: 80%;
 }
+@media (max-width: 400px) {
+  .crypto-input {
+    font-size: 16px;
+  }
+}
+
+.tokenChoice {
+  padding-left: 20px !important;
+  border: none !important;
+}
+
+.tokenChoice:hover {
+  cursor: pointer;
+  background-color: #1f2639;
+}
+.ant-modal-content {
+  background-color: #06080f !important;
+  color: white;
+  padding: 0 !important;
+  border: solid 1px #1f2639 !important;
+  padding-top: 10px !important;
+}
+
+.ant-modal-header {
+  background-color: #06080f !important;
+  padding-left: 20px !important;
+}
+.ant-modal-title {
+  color: white !important;
+}
+
+.search-input {
+  width: 92%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  background-color: rgb(25, 33, 52);
+  border: none;
+  outline: none;
+  color: white;
+  height: 30px;
+  font-size: 17px;
+}
+
+.search-input::placeholder {
+  color: rgb(90, 110, 150);
+  opacity: 1;
+}
+.search-input:hover {
+  background-color: #1f2639;
+}
+
+
+.ant-modal-close {
+  color: white !important;
+}
+
+.crypto-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.crypto-id {
+  font-size: 14px;
+  color: gray;
+}
+
+.chart-cointainer {
+  max-width: 1000px;
+  width: 100%;
+}
+

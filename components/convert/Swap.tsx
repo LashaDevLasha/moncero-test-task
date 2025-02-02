@@ -1,48 +1,16 @@
-import { ArrowDownOutlined, CaretDownOutlined } from "@ant-design/icons";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { Modal } from "antd/lib";
-import SelectCryptoModal from "./SelectCryptoModal";
+import React, { useEffect, useState, useRef } from "react";
+import { ArrowDownOutlined } from "@ant-design/icons";
 import { useCryptoContext } from "@/context/CryptoContext";
+import CryptoSelector from "../UI/CryptoSelector";
+import SelectCryptoModal from "./SelectCryptoModal";
+import { SwitchButton, TradeBox } from "./SwapStyles.styles";
 
-const CryptoSelector = ({
-  label,
-  selectedCrypto,
-  priceUsd,
-  onClick,
-}: {
-  label: "FROM" | "TO";
-  selectedCrypto: string;
-  priceUsd?: number;
-  onClick: () => void;
-}) => (
-  <div className="switchBox">
-    <span className="boxLabel">{label}</span>
 
-    <div className="middle-input-div">
-      <input
-        // type="text"
-        value={`$${priceUsd}`}
-        readOnly
-        className="crypto-input"
-      />
-      <div className="select-div" onClick={onClick}>
-        <Image
-          src={`/${selectedCrypto}.png`}
-          alt={selectedCrypto}
-          width={30}
-          height={30}
-          priority
-          className="cryptoIcon"
-        />
-        <span className="cryptoId">{selectedCrypto}</span>
-        <CaretDownOutlined className="downArrow" />
-      </div>
-    </div>
-  </div>
-);
 
 const Swap: React.FC = () => {
+  const [fromInput, setFromInput] = useState<string>("0");
+  const [toInput, setToInput] = useState<string>("0");
+  const [lastUpdated, setLastUpdated] = useState<"FROM" | "TO" | null>(null);
   const [modalType, setModalType] = useState<"FROM" | "TO" | null>(null);
   const {
     selectedCryptoFROM,
@@ -51,6 +19,8 @@ const Swap: React.FC = () => {
     setSelectedCryptoTO,
     cryptoAssets,
   } = useCryptoContext();
+
+  const isUpdating = useRef(false);
 
   useEffect(() => {
     if (!selectedCryptoFROM && cryptoAssets[0]) {
@@ -82,6 +52,9 @@ const Swap: React.FC = () => {
   const switchBoxes = () => {
     setSelectedCryptoFROM(selectedCryptoTO);
     setSelectedCryptoTO(selectedCryptoFROM);
+    setFromInput(toInput);
+    setToInput(fromInput);
+    setLastUpdated((prev) => (prev === "FROM" ? "TO" : "FROM"));
   };
 
   const fromPrice = cryptoAssets.find(
@@ -91,48 +64,122 @@ const Swap: React.FC = () => {
     (asset) => asset.id === selectedCryptoTO?.id
   )?.priceUsd;
 
+  const MAX_DECIMALS = 2;
+  const MAX_INPUT_LENGTH = 15;
+
+  const handleFromInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUpdating.current) return;
+    let value = e.target.value;
+
+    if (!/^\d*\.?\d*$/.test(value)) return;
+
+    if (value.length > MAX_INPUT_LENGTH) {
+      value = value.slice(0, MAX_INPUT_LENGTH);
+    }
+
+    const [integer, decimal] = value.split(".");
+    if (decimal && decimal.length > MAX_DECIMALS) {
+      value = `${integer}.${decimal.slice(0, MAX_DECIMALS)}`;
+    }
+
+    value = value.replace(/^0+(?=\d)/, "");
+    setFromInput(value);
+    setLastUpdated("FROM");
+
+    if (!value) {
+      setToInput("");
+    } else if (fromPrice && toPrice) {
+      const calculatedToValue =
+        (parseFloat(value) * Number(fromPrice ?? 0)) / Number(toPrice ?? 1);
+      setToInput(calculatedToValue.toString());
+    }
+
+    isUpdating.current = true;
+  };
+
+  const handleToInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUpdating.current) return;
+    let value = e.target.value;
+    if (!/^\d*\.?\d*$/.test(value)) return;
+    if (value.length > MAX_INPUT_LENGTH) {
+      value = value.slice(0, MAX_INPUT_LENGTH);
+    }
+    const [integer, decimal] = value.split(".");
+    if (decimal && decimal.length > MAX_DECIMALS) {
+      value = `${integer}.${decimal.slice(0, MAX_DECIMALS)}`;
+    }
+
+    value = value.replace(/^0+(?=\d)/, "");
+    setToInput(value);
+    setLastUpdated("TO");
+
+    if (!value) {
+      setFromInput("");
+    } else if (fromPrice && toPrice) {
+      const calculatedFromValue =
+        (parseFloat(value) * Number(toPrice ?? 0)) / Number(fromPrice ?? 1);
+      setFromInput(calculatedFromValue.toString());
+    }
+
+    isUpdating.current = true;
+  };
+
+  useEffect(() => {
+    isUpdating.current = false;
+  }, [fromInput, toInput]);
+
+  useEffect(() => {
+    if (lastUpdated === "FROM" && fromInput && fromPrice && toPrice) {
+      const calculatedToValue =
+        (parseFloat(fromInput) * Number(fromPrice ?? 0)) / Number(toPrice ?? 1);
+      setToInput(calculatedToValue.toString());
+    }
+  }, [fromInput, fromPrice, toPrice, lastUpdated]);
+
+  useEffect(() => {
+    if (lastUpdated === "TO" && toInput && fromPrice && toPrice) {
+      const calculatedFromValue =
+        (parseFloat(toInput) * Number(toPrice ?? 0)) / Number(fromPrice ?? 1);
+      setFromInput(calculatedFromValue.toString());
+    }
+  }, [toInput, fromPrice, toPrice, lastUpdated]);
+
   return (
-    <div className="tradeBox">
+    <TradeBox>
       <CryptoSelector
         label="FROM"
-        selectedCrypto={fromCrypto}
-        priceUsd={fromPrice ? parseFloat(fromPrice) : undefined}
+        selectedItem={fromCrypto}
         onClick={() => openModal("FROM")}
+        inputValue={fromInput}
+        onInputChange={handleFromInputChange}
+        iconSrc={`/${fromCrypto}.png`}
       />
-      <div className="switchButton" onClick={switchBoxes}>
+      <SwitchButton onClick={switchBoxes}>
         <ArrowDownOutlined className="switchArrow" />
-      </div>
+      </SwitchButton>
       <CryptoSelector
         label="TO"
-        selectedCrypto={toCrypto}
-        priceUsd={toPrice ? parseFloat(toPrice) : undefined}
+        selectedItem={toCrypto}
         onClick={() => openModal("TO")}
+        inputValue={toInput}
+        onInputChange={handleToInputChange}
+        iconSrc={`/${toCrypto}.png`}
       />
 
-      <Modal
-        title={`Select Currency - ${modalType}`}
-        open={modalType !== null}
+      <SelectCryptoModal
+        modalVisible={modalType !== null}
         onCancel={closeModal}
-        footer={null}
-      >
-        <SelectCryptoModal
-          onCancel={closeModal}
-          onSelectCrypto={(cryptoId) => {
-            if (modalType === "FROM") {
-              setSelectedCryptoFROM(cryptoId);
-            } else if (modalType === "TO") {
-              setSelectedCryptoTO(cryptoId);
-            }
-            closeModal();
-          }}
-          excludedAssets={
-            [selectedCryptoFROM?.id, selectedCryptoTO?.id].filter(
-              Boolean
-            ) as string[]
+        onSelectCrypto={(cryptoId) => {
+          if (modalType === "FROM") {
+            setSelectedCryptoFROM(cryptoId);
+          } else if (modalType === "TO") {
+            setSelectedCryptoTO(cryptoId);
           }
-        />
-      </Modal>
-    </div>
+          closeModal();
+        }}
+        excludedAssets={ [selectedCryptoFROM?.id, selectedCryptoTO?.id].filter(Boolean) as string[] }
+      />
+    </TradeBox>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styles from "@/styles/Convert.module.css";
+// import styles from "@/styles/Convert.module.css";
 import Swap from "@/components/convert/Swap";
 import { getCryptoAssets } from "@/services/table/cryptoAsset";
 import { CryptoAsset } from "@/context/types";
@@ -35,7 +35,7 @@ export default function Convert({
 
   return (
     <>
-      <main className={styles.main}>
+      <main>
         <Swap />
       </main>
     </>
