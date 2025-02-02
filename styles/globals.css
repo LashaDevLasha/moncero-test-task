@@ -16,9 +16,14 @@ body {
 main {
   min-height: 92vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
   color: white;
+  width: 100%;
+  overflow-x: hidden;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .ant-modal-content {
@@ -41,5 +46,26 @@ main {
   color: white !important;
 }
 
+.anticon-filter {
+  color: white;
+}
+.ant-table-column-sorter-full {
+  color: white !important;
+}
+.ant-table-filter-dropdown {
+  background-color: #06080f !important;
+  color: white !important;
+}
+.ant-btn {
+  color: white !important;
+}
 
+.table-responsive .ant-table-content {
+  display: block !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+}
 
+.table-responsive .ant-table-content .ant-table-cell {
+  white-space: nowrap;
+}

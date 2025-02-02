@@ -5,6 +5,7 @@ export const Footer = styled.footer`
   height: 4vh;
   padding: 0;
   margin: 0;
+  // background-color: white;
 `;
 
 export const Text = styled.div`

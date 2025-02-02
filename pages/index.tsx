@@ -1,8 +1,8 @@
-import CustomCard from "@/components/UI/CustomCard";
 import SelectPeriod from "@/components/UI/SelectPeriod";
 import Statistics from "@/components/UI/Statistics";
 import Table from "@/components/UI/table/CustomTable";
 import { useCryptoContext } from "@/context/CryptoContext";
+import useWindowSize from "@/hooks/window-size";
 import { getChartData } from "@/services/chart/charts";
 import { useSocketCryptoPrices } from "@/services/socketCryptoPrices";
 import { getCryptoAssets } from "@/services/table/cryptoAsset";
@@ -19,6 +19,7 @@ interface HomeProps {
 export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   const { cryptoAssets, setCryptoAssets } = useCryptoContext();
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
+  const { width } = useWindowSize();  
 
   const fetchCryptoAssets = useCallback(async () => {
     const response = await getCryptoAssets();
@@ -192,12 +193,31 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   return (
     <>
       <main>
-        <CustomCard>
-          {/* <button onClick={() => console.log(cryptoAssets)}>data</button> */}
-          <h1>Crypto Assets</h1>
-
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            overflow: "auto",
+            margin: "0 auto",
+            width: "100%",
+            height: "100%",
+            marginTop: width < 768 ? "50px" : "0"
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "2rem",
+              color: "white",
+              marginBottom: "1rem",
+              margin: "0 auto",
+              paddingBottom: "20px",
+            }}
+          >
+            Crypto Assets
+          </h1>
           <Table columns={columns} data={cryptoAssets} />
-        </CustomCard>
+        </div>
       </main>
     </>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "antd/lib";
+import { Table, ConfigProvider } from "antd/lib";
 import type { ColumnType } from "antd/es/table";
 
 interface DataTableProps<T> {
@@ -7,7 +7,10 @@ interface DataTableProps<T> {
   data: T[];
 }
 
-const CustomTable = <T extends Record<string, unknown>>({ columns, data }: DataTableProps<T>) => {
+const CustomTable = <T extends Record<string, unknown>>({
+  columns,
+  data,
+}: DataTableProps<T>) => {
   const modifiedColumns = columns?.map((column) => {
     let modifiedColumn = { ...column };
 
@@ -30,13 +33,14 @@ const CustomTable = <T extends Record<string, unknown>>({ columns, data }: DataT
           }
           return 0;
         },
-        // sortDirections: ['ascend', 'descend'],
       };
     }
 
     if (column.canFilter) {
       const dataIndex = column.dataIndex as keyof T;
-      const uniqueValues = Array.from(new Set(data.map((item) => item[dataIndex])));
+      const uniqueValues = Array.from(
+        new Set(data.map((item) => item[dataIndex]))
+      );
 
       modifiedColumn = {
         ...modifiedColumn,
@@ -46,14 +50,45 @@ const CustomTable = <T extends Record<string, unknown>>({ columns, data }: DataT
           key: `${String(value)}-${index}`,
         })),
         onFilter: (value, record) => record[dataIndex] === value,
-        
       };
     }
 
     return modifiedColumn;
   });
 
-  return <Table<T> columns={modifiedColumns} dataSource={data} pagination={false} />;
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Table: {
+            colorBgContainer: "#06080f",
+            colorTextHeading: "#ffffff",
+            colorText: "white",
+            borderRadius: 8,
+            headerBg: "rgb(15, 20, 35)",
+            headerSortHoverBg: "rgb(20, 30, 50)",
+            headerSplitColor: "transparent",
+            borderColor: "transparent",
+            filterDropdownBg: "white",
+            rowSelectedBg: "rgb(20, 30, 50)",
+            fixedHeaderSortActiveBg: "rgb(20, 30, 50)",
+            headerSortActiveBg: "rgb(20, 30, 50)",
+            filterDropdownMenuBg: "rgb(10, 15, 30)",
+            headerFilterHoverBg: "rgb(10, 15, 30)",
+            fontFamily: "'Playfair Display', serif",
+            fontSize: 18,
+          },
+        },
+      }}
+    >
+      <Table<T>
+        columns={modifiedColumns}
+        dataSource={data}
+        pagination={false}
+        style={{ maxWidth: "800px", margin: "0 auto" }}
+      />
+    </ConfigProvider>
+  );
 };
 
 export default CustomTable;
