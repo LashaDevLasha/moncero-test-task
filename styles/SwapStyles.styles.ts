@@ -14,10 +14,18 @@ export const TradeBox = styled.div`
   max-width: 600px;
   width: 100%;
   margin-top: 100px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
     margin-top: 60px;
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 80px;
+    padding: 10px; 
   }
 `;
 
@@ -34,10 +42,17 @@ export const SwitchButton = styled.div`
   font-size: 12px;
   transition: 0.3s;
   cursor: pointer;
+  
+  @media (max-width: 768px) {
+    width: 35px;
+    height: 35px;
+    font-size: 10px;
+  }
 
   &:hover {
     color: white;
   }
+
   .switchArrow {
     font-size: 24px;
   }

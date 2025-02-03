@@ -26,6 +26,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const { width } = useWindowSize();
   const isSmallScreen = width < 768;
+  const marginTop = width <= 285 ? "60px" : width < 768 ? "30px" : "20px";
 
   const fetchCryptoAssets = useCallback(async () => {
     const response = await getCryptoAssets();
@@ -216,15 +217,13 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
         <div
           style={{
             display: "flex",
-            // marginTop: "50px",
             flexDirection: "column",
             justifyContent: "center",
-            // background: "red",
             overflow: "auto",
             margin: "0 auto",
             width: "100%",
             height: "100%",
-            marginTop: width < 768 ? "50px" : "20px",
+            marginTop: marginTop,
           }}
         >
           {loading ? (

@@ -3,8 +3,10 @@ import styled from "styled-components";
 export const ChartContainer = styled.div`
   max-width: 1000px;
   width: 100%;
-  margin-top: 40px; 
+  margin-top: 40px;
+  overflow-x: hidden;  /* Prevent horizontal scroll */
 
+  /* Adjust margin-top on smaller screen sizes */
   @media (max-width: 1000px) {
     margin-top: 60px;
   }
@@ -14,14 +16,17 @@ export const ChartContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    margin-top: 100px; 
+    margin-top: 100px;
   }
 `;
+
 export const PeriodContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
   width: 100%;
+  padding: 0 50px; 
+  box-sizing: border-box; 
 `;
 
 export const StyledLabel = styled.label`
@@ -46,9 +51,18 @@ export const StyledButton = styled.button`
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
-  cursor: pointer;
   margin-right: 9px;
   border: 1px solid #1f2639;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    height: 28px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    height: 24px;
+  }
 
   &:hover {
     background-color: #2b3449;
@@ -65,4 +79,8 @@ export const StyledHeaderDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px;
 `;
+
