@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Select } from "antd/lib";
+// import { Select } from "antd/lib";
 import fetchCurrency from "@/services/fetchDifferentCurrency";
+import { StyledSelect } from "@/styles/SelectPeriod.styles";
 
 interface CurrencySelectProps {
   setEurRate: React.Dispatch<React.SetStateAction<number | null>>;
@@ -9,7 +10,7 @@ interface CurrencySelectProps {
 
 const CurrencySelect: React.FC<CurrencySelectProps> = ({
   setEurRate,
-  setCurrency, 
+  setCurrency,
 }) => {
   const [selectedCurrency, setSelectedCurrency] = useState<string>("1");
 
@@ -29,23 +30,15 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({
     setCurrency(selectedCurrency === "1" ? "USD" : "EUR");
   }, [selectedCurrency, setEurRate, setCurrency]);
 
-  const handleChange = (value: string) => {
-    setSelectedCurrency(value);
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCurrency(event.target.value);
   };
 
   return (
-    <Select
-      showSearch
-      value={selectedCurrency}
-      onChange={handleChange}
-      filterOption={(input, option) =>
-        (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-      }
-      options={[
-        { value: "1", label: "Dollar" },
-        { value: "2", label: "EUR" },
-      ]}
-    />
+    <StyledSelect value={selectedCurrency} onChange={handleChange} style={{ marginLeft: 0, marginBottom: 5 }}>
+      <option value="1">Dollar</option>
+      <option value="2">EUR</option>
+    </StyledSelect>
   );
 };
 

@@ -231,18 +231,19 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
                   color: "white",
                   marginBottom: "1rem",
                   margin: "0 auto",
-                  paddingBottom: "20px",
+                  paddingBottom: "30px",
                 }}
               >
                 Crypto Assets
               </h1>
+
               <div style={{ margin: "0 auto", marginBottom: "20px" }}>
                 <CurrencySelect
                   setEurRate={setEurRate}
                   setCurrency={setCurrency}
                 />
+                <Table columns={columns} data={cryptoAssets} rowKey="id" />
               </div>
-              <Table columns={columns} data={cryptoAssets} rowKey="id" />
             </>
           )}
         </div>
