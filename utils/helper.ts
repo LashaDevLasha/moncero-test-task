@@ -1,11 +1,11 @@
 import { CryptoAsset } from "@/context/types";
 
-export const formatCurrency = (amount: number): string => {
-  return amount.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
+export const formatCurrency = (amount: number, currency: string = "USD"): string => {
+  return amount.toLocaleString("en-US", {
+    style: "currency",
+    currency,
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   });
 };
 

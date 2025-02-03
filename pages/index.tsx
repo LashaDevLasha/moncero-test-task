@@ -1,3 +1,4 @@
+import CurrencySelect from "@/components/UI/CurrencySelect";
 import SelectPeriod from "@/components/UI/SelectPeriod";
 import Statistics from "@/components/UI/Statistics";
 import Table from "@/components/UI/table/CustomTable";
@@ -18,8 +19,10 @@ interface HomeProps {
 
 export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   const { cryptoAssets, setCryptoAssets } = useCryptoContext();
+  const [currency, setCurrency] = useState<string>("");
+  const [eurRate, setEurRate] = useState<number | null>(1);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
-  const { width } = useWindowSize();  
+  const { width } = useWindowSize();
 
   const fetchCryptoAssets = useCallback(async () => {
     const response = await getCryptoAssets();
@@ -44,6 +47,11 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   useEffect(() => {
     setCryptoAssets(initialcryptoAssets);
   }, [initialcryptoAssets, setCryptoAssets]);
+
+  useEffect(() => {
+    console.log(eurRate);
+    console.log(currency);
+  }, [eurRate, currency]);
 
   useEffect(() => {
     if (selectedPeriod === "24h") {
@@ -173,7 +181,11 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
       title: "Price",
       dataIndex: "priceUsd",
       canSort: true,
-      render: (price: string) => formatCurrency(parseFloat(price)),
+      render: (price: string) =>
+        formatCurrency(
+          parseFloat(price) * (currency === "EUR" && eurRate ? eurRate : 1),
+          currency
+        ),
     },
     {
       key: "3",
@@ -202,7 +214,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
             margin: "0 auto",
             width: "100%",
             height: "100%",
-            marginTop: width < 768 ? "50px" : "0"
+            marginTop: width < 768 ? "50px" : "0",
           }}
         >
           <h1
@@ -216,6 +228,10 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
           >
             Crypto Assets
           </h1>
+          <div style={{ margin: "0 auto", marginBottom: "20px" }}>
+            <CurrencySelect setEurRate={setEurRate} setCurrency={setCurrency} />
+          </div>
+
           <Table columns={columns} data={cryptoAssets} />
         </div>
       </main>
