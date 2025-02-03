@@ -31,7 +31,19 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
   const [selectedCryptoName, setSelectedCryptoName] = useState<string>("Bitcoin");
   const { setCryptoInfo, setCryptoAssets } = useCryptoContext();
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false); 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number } | null>(null);
+
+  const handleMouseMove = (event: React.MouseEvent) => {
+    const chartArea = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - chartArea.left;
+    const y = event.clientY - chartArea.top;
+    setCursorPosition({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setCursorPosition(null);
+  };
 
   useEffect(() => {
     setCryptoAssets(initialcryptoAssets);
@@ -84,7 +96,7 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
     }
 
     const fetchData = async () => {
-      setLoading(true); 
+      setLoading(true);
       try {
         const response = await getChartData({
           assetId: selectedCrypto,
@@ -115,7 +127,7 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
       } catch (error) {
         console.error("Error fetching chart data:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -169,7 +181,39 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
       {loading ? (
         <Spin size="large" style={{ display: "block", margin: "auto", paddingTop: "50px" }} />
       ) : (
-        <LineChart labels={labels} data={data} title="Crypto Price Trend" />
+        <div
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave} 
+          style={{ position: "relative" }}
+        >
+          <LineChart labels={labels} data={data} title="Crypto Price Trend" />
+          {cursorPosition && (
+            <>
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: cursorPosition.x,
+                  width: "1px",
+                  height: "100%",
+                  backgroundColor: "white",
+                  pointerEvents: "none", 
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  top: cursorPosition.y,
+                  left: 0,
+                  width: "100%",
+                  height: "1px",
+                  backgroundColor: "white",
+                  pointerEvents: "none", 
+                }}
+              />
+            </>
+          )}
+        </div>
       )}
     </ChartContainer>
   );
