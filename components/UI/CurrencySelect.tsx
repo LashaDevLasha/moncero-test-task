@@ -9,7 +9,7 @@ interface CurrencySelectProps {
 
 const CurrencySelect: React.FC<CurrencySelectProps> = ({
   setEurRate,
-  setCurrency,
+  setCurrency, 
 }) => {
   const [selectedCurrency, setSelectedCurrency] = useState<string>("1");
 

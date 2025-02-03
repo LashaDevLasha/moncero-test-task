@@ -11,6 +11,7 @@ import { CryptoAsset } from "@/services/table/types";
 import { formatCurrency } from "@/utils/helper";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { Spin } from "antd/lib";
 
 interface HomeProps {
   initialcryptoAssets: CryptoAsset[];
@@ -22,6 +23,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   const [currency, setCurrency] = useState<string>("USD");
   const [eurRate, setEurRate] = useState<number | null>(1);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
+  const [loading, setLoading] = useState<boolean>(true);
   const { width } = useWindowSize();
 
   const fetchCryptoAssets = useCallback(async () => {
@@ -39,15 +41,15 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
           changePercent24Hr: asset.changePercent24Hr,
         }))
       );
-    } else {  
+    } else {
       setCryptoAssets(cryptoAssets);
     }
   }, [selectedPeriod, setCryptoAssets]);
 
   useEffect(() => {
     setCryptoAssets(initialcryptoAssets);
+    setLoading(false);
   }, [initialcryptoAssets, setCryptoAssets]);
-
 
   useEffect(() => {
     if (selectedPeriod === "24h") {
@@ -213,22 +215,34 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
             marginTop: width < 768 ? "50px" : "0",
           }}
         >
-          <h1
-            style={{
-              fontSize: "2rem",
-              color: "white",
-              marginBottom: "1rem",
-              margin: "0 auto",
-              paddingBottom: "20px",
-            }}
-          >
-            Crypto Assets
-          </h1>
-          <div style={{ margin: "0 auto", marginBottom: "20px" }}>
-            <CurrencySelect setEurRate={setEurRate} setCurrency={setCurrency} />
-          </div>
-
-          <Table columns={columns} data={cryptoAssets} />
+          {loading ? (
+            <div
+              style={{ textAlign: "center", color: "white", marginTop: "50px" }}
+            >
+              <Spin size="large" />
+            </div>
+          ) : (
+            <>
+              <h1
+                style={{
+                  fontSize: "2rem",
+                  color: "white",
+                  marginBottom: "1rem",
+                  margin: "0 auto",
+                  paddingBottom: "20px",
+                }}
+              >
+                Crypto Assets
+              </h1>
+              <div style={{ margin: "0 auto", marginBottom: "20px" }}>
+                <CurrencySelect
+                  setEurRate={setEurRate}
+                  setCurrency={setCurrency}
+                />
+              </div>
+              <Table columns={columns} data={cryptoAssets} />
+            </>
+          )}
         </div>
       </main>
     </>
