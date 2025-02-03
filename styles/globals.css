@@ -15,9 +15,11 @@ body {
 }
 main {
   min-height: 92vh;
+  /* background-color: aqua; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* padding-top: 100px; */
+  /* justify-content: center; */
   align-items: center;
   color: white;
   width: 100%;
@@ -68,4 +70,8 @@ main {
 
 .table-responsive .ant-table-content .ant-table-cell {
   white-space: nowrap;
+}
+
+.ant-dropdown-menu-item-selected{
+  background-color: #06080f !important;
 }

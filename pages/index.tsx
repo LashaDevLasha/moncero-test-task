@@ -206,13 +206,15 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
         <div
           style={{
             display: "flex",
+            // marginTop: "50px",
             flexDirection: "column",
             justifyContent: "center",
+            // background: "red",
             overflow: "auto",
             margin: "0 auto",
             width: "100%",
             height: "100%",
-            marginTop: width < 768 ? "50px" : "0",
+            marginTop: width < 768 ? "50px" : "20px",
           }}
         >
           {loading ? (

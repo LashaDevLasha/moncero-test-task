@@ -34,7 +34,7 @@ export default function Convert({
 
   return (
     <>
-      <main>
+      <main style={{marginTop:"100px"}}>
         <Swap />
       </main>
     </>

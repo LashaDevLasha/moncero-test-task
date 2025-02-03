@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const ChartContainer = styled.div`
   max-width: 1000px;
   width: 100%;
+  margin-top: 100px;
 `;
 
 export const PeriodContainer = styled.div`
