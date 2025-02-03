@@ -41,7 +41,7 @@ export const StyledLabel = styled.label`
 `;
 
 export const StyledButton = styled.button`
-  margin: 5px;
+  padding: 10px;
   height: 32px;
   background-color: #06080f;
   color: #fff;
@@ -51,6 +51,10 @@ export const StyledButton = styled.button`
   cursor: pointer;
   margin-right: 9px;
   border: 1px solid #1f2639;
+
+  display: flex;               
+  justify-content: center;     
+  align-items: center;         
 
   @media (max-width: 768px) {
     font-size: 12px;
