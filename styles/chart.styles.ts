@@ -3,9 +3,20 @@ import styled from "styled-components";
 export const ChartContainer = styled.div`
   max-width: 1000px;
   width: 100%;
-  margin-top: 100px;
-`;
+  margin-top: 40px; 
 
+  @media (max-width: 1000px) {
+    margin-top: 60px;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 80px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 100px; 
+  }
+`;
 export const PeriodContainer = styled.div`
   display: flex;
   justify-content: flex-end;

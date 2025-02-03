@@ -36,7 +36,7 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({
 
   return (
     <StyledSelect value={selectedCurrency} onChange={handleChange} style={{ marginLeft: 0, marginBottom: 5 }}>
-      <option value="1">Dollar</option>
+      <option value="1">USD</option>
       <option value="2">EUR</option>
     </StyledSelect>
   );

@@ -3,6 +3,7 @@ import { Table, ConfigProvider } from "antd/lib";
 import type { ColumnType } from "antd/es/table";
 import useWindowSize from "@/hooks/window-size";
 
+
 interface DataTableProps<T> {
   columns: (ColumnType<T> & { canSort?: boolean; canFilter?: boolean })[];
   data: T[];
@@ -15,7 +16,24 @@ const CustomTable = <T extends Record<string, unknown>>({
   rowKey,
 }: DataTableProps<T>) => {
   const { width } = useWindowSize();
-  const fontSize = width < 768 ? 12 : 18;
+
+  const cellFontSize = useMemo(() => {
+    if (width < 480) return 12;
+    if (width < 768) return 14;
+    return 16;
+  }, [width]);
+
+  const cellPaddingBlock = useMemo(() => {
+    if (width < 480) return 8;
+    if (width < 768) return 12;
+    return 16;
+  }, [width]);
+
+  const cellPaddingInline = useMemo(() => {
+    if (width < 480) return 8;
+    if (width < 768) return 12;
+    return 16;
+  }, [width]);
 
   const getSorter = useCallback((column: ColumnType<T>) => {
     return (a: T, b: T) => {
@@ -104,8 +122,11 @@ const CustomTable = <T extends Record<string, unknown>>({
             headerSortActiveBg: "rgb(20, 30, 50)",
             filterDropdownMenuBg: "rgb(10, 15, 30)",
             headerFilterHoverBg: "rgb(10, 15, 30)",
-            fontFamily: "'Playfair Display', serif",
-            fontSize,
+            fontSize: cellFontSize,
+            cellPaddingBlock,
+            cellPaddingInline,
+            fontFamily: "'Lexend', sans-serif",
+            fontWeightStrong: 200,
           },
         },
       }}

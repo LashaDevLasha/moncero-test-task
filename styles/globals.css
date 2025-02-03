@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Exo+2&family=Rajdhani&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&display=swap');
+
 body {
   background-color: rgb(25, 33, 52);
   background: rgb(25, 33, 52);
@@ -12,7 +15,16 @@ body {
   overflow-x: hidden;
   margin: 0;
   box-sizing: border-box;
+  font-family: "Exo 2", sans-serif;
 }
+
+.custom-table-font {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400; /* You can adjust the font weight here */
+  font-size: 10px;  /* Adjust font size */
+}
+
+
 main {
   min-height: 92vh;
   /* background-color: aqua; */
@@ -27,6 +39,10 @@ main {
   padding-left: 10px;
   padding-right: 10px;
 }
+.ant-table-column-title{
+  font-size: 12px;
+}
+
 
 .ant-modal-content {
   background-color: #06080f !important;

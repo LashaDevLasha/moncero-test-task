@@ -180,6 +180,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
       title: "Price",
       dataIndex: "priceUsd",
       canSort: true,
+      width: 150,
       render: (price: string) =>
         formatCurrency(
           parseFloat(price) * (currency === "EUR" && eurRate ? eurRate : 1),
@@ -197,11 +198,11 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
           {isSmallScreen ? (
             <>
               <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
-              <span>Change</span>
+              <span style={{ fontSize: "12px" }}>Change</span>
             </>
           ) : (
             <>
-              <span>Change</span>
+              <span style={{ fontSize: "12px" }}>Change</span>
               <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
             </>
           )}
