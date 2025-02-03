@@ -46,4 +46,17 @@ export const StyledLink = styled.a`
   &:hover {
     color: rgb(75, 192, 192);
   }
+
+
+  @media (max-width: 768px) {
+    font-size: 16px;  
+  }
+
+  @media (max-width: 600px) {
+    font-size: 14px;  
+  }
+
+  @media (max-width: 400px) {
+    font-size: 12px; 
+  }
 `;

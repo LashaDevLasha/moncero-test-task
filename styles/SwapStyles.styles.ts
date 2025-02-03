@@ -24,9 +24,14 @@ export const TradeBox = styled.div`
   }
 
   @media (max-width: 480px) {
-    margin-top: 80px;
+    margin-top: 40px;
     padding: 10px; 
   }
+  
+  @media (max-width: 280px){
+   margin-top: 80px;
+  }
+    
 `;
 
 export const SwitchButton = styled.div`
