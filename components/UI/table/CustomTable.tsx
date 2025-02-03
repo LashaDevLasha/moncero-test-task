@@ -14,30 +14,33 @@ const CustomTable = <T extends Record<string, unknown>>({
   data,
   rowKey,
 }: DataTableProps<T>) => {
-  const { width } = useWindowSize(); 
-  const fontSize = width < 768 ? 12 : 18; 
+  const { width } = useWindowSize();
+  const fontSize = width < 768 ? 12 : 18;
 
-  const getSorter = useCallback(
-    (column: ColumnType<T>) => {
-      return (a: T, b: T) => {
-        const dataIndex = column.dataIndex as keyof T;
-        const aValue = a[dataIndex];
-        const bValue = b[dataIndex];
+  const getSorter = useCallback((column: ColumnType<T>) => {
+    return (a: T, b: T) => {
+      const dataIndex = column.dataIndex as keyof T;
+      const aValue = a[dataIndex];
+      const bValue = b[dataIndex];
 
-        if (typeof aValue === "number" && typeof bValue === "number") {
-          return aValue - bValue;
-        }
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          return aValue.localeCompare(bValue);
-        }
-        if (aValue instanceof Date && bValue instanceof Date) {
-          return aValue.getTime() - bValue.getTime();
-        }
-        return 0;
-      };
-    },
-    []
-  );
+      const aNumeric = !isNaN(Number(aValue)) ? Number(aValue) : aValue;
+      const bNumeric = !isNaN(Number(bValue)) ? Number(bValue) : bValue;
+
+      if (typeof aNumeric === "number" && typeof bNumeric === "number") {
+        return aNumeric - bNumeric;
+      }
+
+      if (typeof aNumeric === "string" && typeof bNumeric === "string") {
+        return aNumeric.localeCompare(bNumeric);
+      }
+
+      if (aValue instanceof Date && bValue instanceof Date) {
+        return aValue.getTime() - bValue.getTime();
+      }
+
+      return 0;
+    };
+  }, []);
 
   const modifiedColumns = useMemo(
     () =>
@@ -53,9 +56,12 @@ const CustomTable = <T extends Record<string, unknown>>({
 
         if (column.canFilter) {
           const dataIndex = column.dataIndex as keyof T;
+
           const uniqueValues = Array.from(
             new Set(data.map((item) => item[dataIndex]))
-          );
+          ).map((value) => {
+            return isNaN(Number(value)) ? value : Number(value);
+          });
 
           modifiedColumn = {
             ...modifiedColumn,
@@ -64,7 +70,13 @@ const CustomTable = <T extends Record<string, unknown>>({
               value: String(value),
               key: `${String(value)}-${index}`,
             })),
-            onFilter: (value, record) => record[dataIndex] === value,
+            onFilter: (value, record) => {
+              const recordValue = record[dataIndex];
+
+              return typeof recordValue === "number"
+                ? recordValue === Number(value)
+                : String(recordValue) === value;
+            },
           };
         }
 
@@ -93,7 +105,7 @@ const CustomTable = <T extends Record<string, unknown>>({
             filterDropdownMenuBg: "rgb(10, 15, 30)",
             headerFilterHoverBg: "rgb(10, 15, 30)",
             fontFamily: "'Playfair Display', serif",
-            fontSize, 
+            fontSize,
           },
         },
       }}
