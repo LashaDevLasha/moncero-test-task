@@ -11,10 +11,13 @@ export const TradeBox = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
+  max-width: 600px;
+  width: 100%;
   margin-top: 100px;
+  box-sizing: border-box; 
 
   @media (max-width: 768px) {
-    margin-top: 40px; 
+    margin-top: 60px;
   }
 `;
 
