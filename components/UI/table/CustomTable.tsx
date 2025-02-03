@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { Table, ConfigProvider } from "antd/lib";
 import type { ColumnType } from "antd/es/table";
+import useWindowSize from "@/hooks/window-size";
 
 interface DataTableProps<T> {
   columns: (ColumnType<T> & { canSort?: boolean; canFilter?: boolean })[];
@@ -13,6 +14,9 @@ const CustomTable = <T extends Record<string, unknown>>({
   data,
   rowKey,
 }: DataTableProps<T>) => {
+  const { width } = useWindowSize(); 
+  const fontSize = width < 768 ? 12 : 18; 
+
   const getSorter = useCallback(
     (column: ColumnType<T>) => {
       return (a: T, b: T) => {
@@ -32,7 +36,7 @@ const CustomTable = <T extends Record<string, unknown>>({
         return 0;
       };
     },
-    [] 
+    []
   );
 
   const modifiedColumns = useMemo(
@@ -43,7 +47,7 @@ const CustomTable = <T extends Record<string, unknown>>({
         if (column.canSort) {
           modifiedColumn = {
             ...modifiedColumn,
-            sorter: getSorter(column), 
+            sorter: getSorter(column),
           };
         }
 
@@ -66,7 +70,7 @@ const CustomTable = <T extends Record<string, unknown>>({
 
         return modifiedColumn;
       }),
-    [columns, data, getSorter] 
+    [columns, data, getSorter]
   );
 
   return (
@@ -89,7 +93,7 @@ const CustomTable = <T extends Record<string, unknown>>({
             filterDropdownMenuBg: "rgb(10, 15, 30)",
             headerFilterHoverBg: "rgb(10, 15, 30)",
             fontFamily: "'Playfair Display', serif",
-            fontSize: 18,
+            fontSize, 
           },
         },
       }}
