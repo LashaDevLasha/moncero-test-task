@@ -4,9 +4,8 @@ export const ChartContainer = styled.div`
   max-width: 1000px;
   width: 100%;
   margin-top: 40px;
-  overflow-x: hidden;  /* Prevent horizontal scroll */
+  overflow-x: hidden;  
 
-  /* Adjust margin-top on smaller screen sizes */
   @media (max-width: 1000px) {
     margin-top: 60px;
   }
@@ -25,7 +24,6 @@ export const PeriodContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
   width: 100%;
-  padding: 0 50px; 
   box-sizing: border-box; 
 `;
 
@@ -81,6 +79,5 @@ export const StyledHeaderDiv = styled.div`
   height: 100px;
   width: 100%;
   box-sizing: border-box;
-  padding: 0 10px;
 `;
 

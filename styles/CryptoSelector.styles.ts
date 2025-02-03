@@ -3,14 +3,13 @@ import { CaretDownOutlined } from "@ant-design/icons";
 
 export const SwitchBox = styled.div`
   max-width: 100%;
-  height: 100px;
   background-color: rgb(25, 33, 52);
   border-radius: 20px;
   padding: 30px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  borderradius: 20px;
+  display:flex;
+  flex-direction:column;
+  gap:30px;
 `;
 
 export const BoxLabel = styled.span`
@@ -18,7 +17,6 @@ export const BoxLabel = styled.span`
 `;
 
 export const MiddleInputDiv = styled.div`
-  margin-top: 20px;
   max-width: 400px;
   width: 100%;
   height: 60%;

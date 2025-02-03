@@ -34,9 +34,7 @@ export default function Convert({
 
   return (
     <>
-      <main >
-        <Swap />
-      </main>
+      <Swap />
     </>
   );
 }

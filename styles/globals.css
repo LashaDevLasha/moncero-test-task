@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Exo+2&family=Rajdhani&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&display=swap');
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: rgb(25, 33, 52);
   background: rgb(25, 33, 52);
@@ -9,7 +15,7 @@ body {
     rgba(25, 33, 52, 1) 28%,
     rgba(7, 8, 21, 1) 75%
   );
-  max-width: 100vw;
+  width: 100%;
   min-height: 100vh;
   height: 100%;
   overflow-x: hidden;
@@ -20,18 +26,15 @@ body {
 
 .custom-table-font {
   font-family: 'Fira Sans', sans-serif;
-  font-weight: 400; /* You can adjust the font weight here */
-  font-size: 10px;  /* Adjust font size */
+  font-weight: 400; 
+  font-size: 10px;  
 }
 
 
 main {
   min-height: 92vh;
-  /* background-color: aqua; */
   display: flex;
   flex-direction: column;
-  /* padding-top: 100px; */
-  /* justify-content: center; */
   align-items: center;
   color: white;
   width: 100%;
