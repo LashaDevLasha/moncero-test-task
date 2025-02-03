@@ -39,7 +39,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
           changePercent24Hr: asset.changePercent24Hr,
         }))
       );
-    } else {
+    } else {  
       setCryptoAssets(cryptoAssets);
     }
   }, [selectedPeriod, setCryptoAssets]);
@@ -48,10 +48,6 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
     setCryptoAssets(initialcryptoAssets);
   }, [initialcryptoAssets, setCryptoAssets]);
 
-  useEffect(() => {
-    console.log(eurRate);
-    console.log(currency);
-  }, [eurRate, currency]);
 
   useEffect(() => {
     if (selectedPeriod === "24h") {
