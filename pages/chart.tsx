@@ -31,7 +31,7 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
   const [selectedCryptoName, setSelectedCryptoName] = useState<string>("Bitcoin");
   const { setCryptoInfo, setCryptoAssets } = useCryptoContext();
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false); // Add loading state
+  const [loading, setLoading] = useState<boolean>(false); 
 
   useEffect(() => {
     setCryptoAssets(initialcryptoAssets);
@@ -84,7 +84,7 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
     }
 
     const fetchData = async () => {
-      setLoading(true); // Start loading
+      setLoading(true); 
       try {
         const response = await getChartData({
           assetId: selectedCrypto,
@@ -115,7 +115,7 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
       } catch (error) {
         console.error("Error fetching chart data:", error);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false); 
       }
     };
 

@@ -5,11 +5,13 @@ import type { ColumnType } from "antd/es/table";
 interface DataTableProps<T> {
   columns: (ColumnType<T> & { canSort?: boolean; canFilter?: boolean })[];
   data: T[];
+  rowKey: string; 
 }
 
 const CustomTable = <T extends Record<string, unknown>>({
   columns,
   data,
+  rowKey, 
 }: DataTableProps<T>) => {
   const modifiedColumns = columns?.map((column) => {
     let modifiedColumn = { ...column };
@@ -84,6 +86,7 @@ const CustomTable = <T extends Record<string, unknown>>({
       <Table<T>
         columns={modifiedColumns}
         dataSource={data}
+        rowKey={rowKey} 
         pagination={false}
         style={{ maxWidth: "800px", margin: "0 auto" }}
       />

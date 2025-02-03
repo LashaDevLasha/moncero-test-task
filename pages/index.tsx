@@ -240,7 +240,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
                   setCurrency={setCurrency}
                 />
               </div>
-              <Table columns={columns} data={cryptoAssets} />
+              <Table columns={columns} data={cryptoAssets} rowKey="id" />
             </>
           )}
         </div>
