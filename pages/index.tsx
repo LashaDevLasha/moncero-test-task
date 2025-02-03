@@ -19,7 +19,7 @@ interface HomeProps {
 
 export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   const { cryptoAssets, setCryptoAssets } = useCryptoContext();
-  const [currency, setCurrency] = useState<string>("");
+  const [currency, setCurrency] = useState<string>("USD");
   const [eurRate, setEurRate] = useState<number | null>(1);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
   const { width } = useWindowSize();
