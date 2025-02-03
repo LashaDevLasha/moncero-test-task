@@ -25,6 +25,7 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<string>("24h");
   const [loading, setLoading] = useState<boolean>(true);
   const { width } = useWindowSize();
+  const isSmallScreen = width < 768;
 
   const fetchCryptoAssets = useCallback(async () => {
     const response = await getCryptoAssets();
@@ -188,17 +189,25 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
     {
       key: "3",
       dataIndex: "",
-      // canSort: true,
       render: (record: CryptoAsset) => (
         <Statistics value={record.changePercent24Hr} />
       ),
       title: (
-        <>
-          Change
-          <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
-        </>
+        <div style={{ display: "flex", flexDirection: isSmallScreen ? "column" : "row", alignItems: "center", gap: "5px" }}>
+          {isSmallScreen ? (
+            <>
+              <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
+              <span>Change</span>
+            </>
+          ) : (
+            <>
+              <span>Change</span>
+              <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
+            </>
+          )}
+        </div>
       ),
-    },
+    }
   ];
   return (
     <>
