@@ -11,6 +11,7 @@ export const TradeBox = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
+  margin-top: 100px;
 `;
 
 export const SwitchButton = styled.div`
