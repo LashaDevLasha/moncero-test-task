@@ -5,7 +5,6 @@ export const Footer = styled.footer`
   height: 4vh;
   padding: 0;
   margin: 0;
-  // background-color: white;
 `;
 
 export const Text = styled.div`
@@ -16,4 +15,14 @@ export const Text = styled.div`
   margin: 0;
   padding: 0;
   color: white;
+  font-size: 16px; 
+
+
+  @media (max-width: 768px) {
+    font-size: 14px; 
+  }
+
+  @media (max-width: 600px) {
+    font-size: 12px;  
+  }
 `;

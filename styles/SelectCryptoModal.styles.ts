@@ -2,11 +2,11 @@ import styled from "styled-components";
 import Image from "next/image";
 
 export const ModalContent = styled.div`
-  background-color: #06080f !important;
+  background-color: #06080f;
   color: white;
-  padding: 0 !important;
-  border: solid 1px #1f2639 !important;
-  padding-top: 10px !important;
+  // padding: 5px;
+  border: solid 1px #1f2639;
+  padding-top: 10px;
 `;
 
 export const SearchInput = styled.input`
@@ -33,12 +33,14 @@ export const SearchInput = styled.input`
 `;
 
 export const TokenChoice = styled.div`
-  padding-left: 20px !important;
+  padding-left: 20px;
   border: none !important;
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  padding-bottom:10px;
+  padding-top:10px;
 
   &:hover {
     background-color: #1f2639;
