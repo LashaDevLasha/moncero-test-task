@@ -1,4 +1,9 @@
-export const fetchData = async <T, P>(url: string, params?: P): Promise<T> => {
+export const fetchData = async <T, P>(
+  url: string,
+  params?: P,
+  retries: number = 3,
+  delay: number = 1000
+): Promise<T> => {
   try {
     const queryString = params
       ? `?${new URLSearchParams(
@@ -22,11 +27,15 @@ export const fetchData = async <T, P>(url: string, params?: P): Promise<T> => {
       throw new Error(`HTTP Error ${response.status}: ${errorText}`);
     }
 
-    const data = await response.json();
-
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
+    if (retries > 0) {
+      console.warn(`Fetch failed. Retrying in ${delay / 1000} seconds...`, error);
+      await new Promise(res => setTimeout(res, delay)); 
+      return fetchData<T, P>(url, params, retries - 1, delay);
+    } else {
+      console.error("Max retries reached. Fetching failed.");
+      throw error;
+    }
   }
 };
