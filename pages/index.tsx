@@ -158,7 +158,6 @@ export default function Home({ initialcryptoAssets, cryptoIds }: HomeProps) {
             style={{ display: "flex", alignItems: "center" }}
             key={record.id}
           >
-            {/* <button onClick={() => console.log(iconPath)}>record</button> */}
             <Image
               src={iconPath}
               alt={`${name} icon`}
