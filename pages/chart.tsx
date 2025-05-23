@@ -14,6 +14,7 @@ import {
   StyledLabel,
 } from "@/styles/chart.styles";
 import { Spin } from "antd/lib";
+import { COINCAP_API_KEY } from "@/config/apiConfig";
 
 interface ChartProps {
   chartData: {
@@ -140,41 +141,55 @@ const Chart: React.FC<ChartProps> = ({ chartData, initialcryptoAssets }) => {
     setModalVisible(false);
   };
 
-  return (
-    <ChartContainer>
-      <StyledHeaderDiv>
-        <StyledLabel htmlFor="cryptoSelect">
-          {selectedCryptoName
-            ? ` ${selectedCryptoName} prices for the last ${
-                selectedPeriod === "24h"
-                  ? "24 hours"
-                  : selectedPeriod === "7d"
-                  ? "7 days"
-                  : "30 days"
-              }`
-            : "Select Crypto"}
-        </StyledLabel>
-        <PeriodContainer>
-          <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
-          <StyledButton onClick={handleOpenModal}>Select Crypto</StyledButton>
-        </PeriodContainer>
-      </StyledHeaderDiv>
-
-      <SelectCryptoModal
-        modalVisible={modalVisible}
-        onCancel={handleCloseModal}
-        onSelectCrypto={handleSelectCrypto}
-        excludedAssets={[]}
-      />
-      {loading ? (
-        <Spin size="large" style={{ display: "block", margin: "auto", paddingTop: "50px" }} />
-      ) : (
-        <div style={{ position: "relative" }}>
-          <LineChart labels={labels} data={data} title="Crypto Price Trend" />
-        </div>
+return (
+  <ChartContainer>
+    <StyledHeaderDiv>
+      {!loading && (
+        <>
+          <StyledLabel htmlFor="cryptoSelect">
+            {selectedCryptoName
+              ? ` ${selectedCryptoName} prices for the last ${
+                  selectedPeriod === "24h"
+                    ? "24 hours"
+                    : selectedPeriod === "7d"
+                    ? "7 days"
+                    : "30 days"
+                }`
+              : "Select Crypto"}
+          </StyledLabel>
+          <PeriodContainer>
+            <SelectPeriod value={selectedPeriod} onChange={handlePeriodChange} />
+            <StyledButton onClick={handleOpenModal}>Select Crypto</StyledButton>
+          </PeriodContainer>
+        </>
       )}
-    </ChartContainer>
-  );
+    </StyledHeaderDiv>
+
+    <SelectCryptoModal
+      modalVisible={modalVisible}
+      onCancel={handleCloseModal}
+      onSelectCrypto={handleSelectCrypto}
+      excludedAssets={[]}
+    />
+
+    <div style={{ position: "relative" }}>
+      {loading && (
+        <Spin
+          size="large"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 10,
+          }}
+        />
+      )}
+      <LineChart labels={labels} data={data} title="Crypto Price Trend" />
+    </div>
+  </ChartContainer>
+);
+
 };
 
 export default Chart;
@@ -184,14 +199,17 @@ export async function getServerSideProps() {
   const currentTimestamp = Date.now();
   const twentyFourHoursAgoTimestamp = currentTimestamp - 24 * 60 * 60 * 1000;
 
-  const response = await getChartData({
-    assetId: "bitcoin",
-    interval,
-    start: twentyFourHoursAgoTimestamp,
-    end: currentTimestamp,
-  });
+  const response = await getChartData(
+    {
+      assetId: "bitcoin",
+      interval,
+      start: twentyFourHoursAgoTimestamp,
+      end: currentTimestamp,
+    },
+    COINCAP_API_KEY // ✅ pass the API key here
+  );
 
-  const responseForCryptoSelect = await getCryptoAssets();
+  const responseForCryptoSelect = await getCryptoAssets(); // make sure this one also passes the key if needed
   const sortedAssets = responseForCryptoSelect.sort(
     (a, b) => parseFloat(b.marketCapUsd) - parseFloat(a.marketCapUsd)
   );

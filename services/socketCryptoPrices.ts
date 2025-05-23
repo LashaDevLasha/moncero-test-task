@@ -13,7 +13,7 @@ export const useSocketCryptoPrices = (
     if (isConnected.current || retryCount.current >= maxRetries) return;
 
     const assetIds = ids.join(",");
-    const wsUrl = `wss://ws.coincap.io/prices?assets=${assetIds}`;
+    const wsUrl = `wss://wss.coincap.io/prices?assets=${assetIds}`;
     const pricesWs = new WebSocket(wsUrl);
 
     pricesWs.onopen = () => {

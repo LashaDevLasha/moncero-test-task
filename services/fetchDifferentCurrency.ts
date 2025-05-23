@@ -1,5 +1,5 @@
 const API_URL = "https://api.freecurrencyapi.com/v1/latest";
-const API_KEY = "fca_live_IOpX3dB4xklI2GdS3KGuaB3o8GQf06Fwrq6dKU18";
+export const API_KEY = "fca_live_IOpX3dB4xklI2GdS3KGuaB3o8GQf06Fwrq6dKU18";
 
 interface CurrencyData {
   data: Record<string, number>;
